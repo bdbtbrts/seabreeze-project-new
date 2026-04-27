@@ -1,0 +1,93 @@
+/* --- Header.css --- */
+.mainHeader {
+  background: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 50px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  transition: all 0.3s ease;
+}
+
+/* Khắc phục lỗi cuộn trang bị che tiêu đề */
+#homestay-section, 
+#rent-section, 
+#contact-footer,
+.featured-sections,
+.products-section {
+    scroll-margin-top: 100px; /* Đẩy nội dung xuống một khoảng khi cuộn tới */
+}
+
+.mainHeader.shrink {
+  padding: 8px 50px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--primary-color);
+  transition: all 0.3s ease;
+}
+
+.mainHeader.shrink .logo { font-size: 20px; }
+
+.nav-menu {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.cart-icon {
+  position: relative;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.cart-count {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background: red;
+  color: white;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 50%;
+}
+
+.btn-login {
+  padding: 8px 16px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Ép toàn bộ chữ trong thanh tìm kiếm xài Arial */
+.search-bar-pill,
+.search-bar-pill *,
+.search-block,
+.block-label,
+.block-input,
+.block-text,
+.guest-type,
+.guest-desc,
+.btn-search-premium {
+    font-family: Arial, Helvetica, sans-serif !important;
+}

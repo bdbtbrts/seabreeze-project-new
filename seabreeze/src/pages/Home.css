@@ -1,0 +1,693 @@
+
+/* --- Search Section --- */
+.search-section-premium {
+  display: flex;
+  justify-content: center;
+  padding: 30px 20px 60px 20px;
+  background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
+}
+
+.search-bar-pill {
+  display: inline-flex;
+  align-items: center;
+  background: #ffffff;
+  border-radius: 50px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+  border: 1px solid #ddd;
+  position: relative;
+}
+
+/* Các khối tìm kiếm */
+.search-block {
+  position: relative;
+  padding: 10px 24px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.search-block:hover { background-color: #ebebeb; }
+
+.block-content { display: flex; flex-direction: column; }
+
+.block-label { font-size: 12px; font-weight: 800; color: #222; margin-bottom: 2px; }
+
+.block-input, .block-text {
+  font-size: 14px; color: #6a6a6a; border: none; background: transparent;
+  outline: none; width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.block-input { width: 150px; color: #222; }
+
+/* Dấu chia cắt */
+.divider { height: 32px; width: 1px; background-color: #dddddd; }
+
+/* Nút tìm kiếm đỏ hồng */
+.guest-block { display: flex; align-items: center; padding-right: 8px; }
+
+.btn-search-premium {
+  background-color: #e00b58; color: white; border: none; border-radius: 30px;
+  padding: 12px 24px; font-size: 15px; font-weight: bold; cursor: pointer;
+  margin-left: 15px; display: flex; align-items: center; gap: 8px; transition: background 0.2s;
+}
+.btn-search-premium:hover { background-color: #d10950; }
+
+
+/* --- Featured Sections (Carousel) --- */
+.featured-sections { padding: 40px 50px 10px 50px; background: var(--white); }
+
+.featured-row { margin-bottom: 40px; }
+
+.row-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.row-header h2 { font-size: 24px; font-weight: 600; cursor: pointer; }
+.row-header h2 i { font-size: 16px; margin-left: 5px; }
+
+.nav-arrows button {
+  background: var(--white); border: 1px solid #ddd; border-radius: 50%;
+  width: 34px; height: 34px; cursor: pointer; margin-left: 8px; transition: 0.2s; color: #333;
+}
+.nav-arrows button:hover { background: #f4f4f4; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+.carousel {
+  display: flex; gap: 20px; overflow-x: auto; scroll-behavior: smooth;
+  padding-bottom: 15px; scrollbar-width: none;
+}
+.carousel::-webkit-scrollbar { display: none; }
+
+.carousel-card { min-width: 270px; max-width: 270px; cursor: pointer; }
+
+.img-container { position: relative; border-radius: 12px; overflow: hidden; aspect-ratio: 1 / 1; }
+.img-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+.carousel-card:hover .img-container img { transform: scale(1.05); }
+
+.badge-favorite {
+  position: absolute; top: 12px; left: 12px; background: rgba(255, 255, 255, 0.95);
+  padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: 600;
+  color: #222; box-shadow: 0 2px 4px rgba(0,0,0,0.15); z-index: 2;
+}
+
+.heart-icon {
+  position: absolute; top: 12px; right: 12px; color: var(--white); font-size: 22px;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5); z-index: 2; transition: color 0.2s;
+}
+.heart-icon:hover { color: #ff385c; }
+
+.carousel-info { padding-top: 12px; }
+.carousel-info h4 { font-size: 16px; font-weight: 600; margin-bottom: 5px; color: #222; }
+
+.carousel-price-rating { display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: #666; }
+.carousel-price span { font-weight: 600; color: #222; }
+.carousel-rating i { font-size: 12px; }
+
+
+/* ================= PRODUCT GRID ================= */
+.product-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 25px; margin-top: 20px;
+}
+
+.card {
+  background: white; border-radius: 12px; overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s; border: 1px solid #eee;
+}
+.card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+.card img { width: 100%; height: 180px; object-fit: cover; }
+
+.card-info { padding: 15px; }
+
+.type-badge {
+  background: #e00b58; color: white; padding: 4px 10px; border-radius: 20px;
+  font-size: 11px; font-weight: bold; text-transform: uppercase;
+}
+
+.card-title { margin: 12px 0 8px; font-size: 18px; color: #222; }
+.card-price { font-size: 15px; color: #666; margin-bottom: 15px; }
+.card-price strong { color: #222; font-size: 16px; }
+
+.btn-book {
+  width: 100%; padding: 12px; background: var(--primary-color); color: white;
+  border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background 0.2s;
+}
+.btn-book:hover { background: #0056b3; }
+
+
+/*footer*/
+.main-footer {
+  background: #f8f9fa;
+  padding: 50px 5% 20px;
+  border-top: 1px solid #ddd;
+  margin-top: 50px;
+}
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+.footer-section h3, .footer-section h4 {
+  color: #007BFF;
+  margin-bottom: 15px;
+}
+.social-icons {
+  display: flex;
+  gap: 20px;
+  font-size: 24px;
+}
+.social-icons a {
+  color: #333;
+  transition: 0.3s;
+}
+.social-icons a:hover {
+  color: #007BFF;
+}
+.footer-bottom {
+  text-align: center;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+  color: #777;
+  font-size: 14px;
+}
+
+/* ================= POPUP ĐỊA ĐIỂM ================= */
+.location-popup {
+    position: absolute;
+    top: 120%;
+    left: 0;
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.15);
+    width: 380px;
+    padding: 20px 0;
+    z-index: 999;
+    cursor: default;
+}
+
+.popup-title {
+    font-size: 13px;
+    font-weight: bold;
+    color: #222;
+    padding: 0 24px 10px;
+    text-transform: uppercase;
+}
+
+.location-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.location-list li {
+    display: flex;
+    align-items: center;
+    padding: 12px 24px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.location-list li:hover {
+    background-color: #f7f7f7;
+}
+
+.location-list li i {
+    font-size: 18px;
+    color: #666;
+    background: #ebebeb;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    margin-right: 15px;
+}
+
+.loc-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.loc-text strong {
+    font-size: 15px;
+    color: #222;
+    margin-bottom: 4px;
+}
+
+.loc-text span {
+    font-size: 13px;
+    color: #777;
+}
+
+/* ================= POPUP THỜI GIAN CHUNG ================= */
+.date-popup {
+    position: absolute;
+    top: 120%;
+    left: -50px;
+    background: #ffffff;
+    border-radius: 32px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.15);
+    width: 800px;
+    padding: 24px 32px;
+    z-index: 999;
+    cursor: default;
+}
+
+.date-tabs-wrapper {
+    border-bottom: 1px solid #ebebeb;
+    margin-bottom: 20px;
+}
+
+.date-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.date-tabs .tab {
+    padding: 10px 15px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #777;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s;
+}
+
+.date-tabs .tab:hover { color: #222; }
+
+.date-tabs .tab.active {
+    color: #222;
+}
+
+.date-tabs .tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #222;
+}
+
+/* --- TAB LỊCH --- */
+.calendars-wrapper {
+    display: flex;
+    gap: 40px;
+    position: relative;
+    padding: 10px 0 20px;
+}
+
+.nav-month {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: transparent;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #222;
+}
+
+.calendar-month { flex: 1; }
+
+.month-title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 20px;
+    text-transform: capitalize;
+}
+
+.weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-size: 12px;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+.days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    row-gap: 2px;
+}
+
+.day-cell {
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    font-size: 14px;
+    font-weight: 600;
+    color: #222;
+}
+.empty-cell { height: 44px; }
+
+.day-number {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    z-index: 2; 
+}
+
+.day-cell:not(.selected-start):not(.selected-end):not(.in-range):hover .day-number {
+    border: 1px solid #222;
+}
+
+.selected-start .day-number, .selected-end .day-number {
+    background: #222;
+    color: white;
+}
+
+.in-range { background: #f7f7f7; }
+.selected-start { background: linear-gradient(to right, transparent 50%, #f7f7f7 50%); }
+.selected-end { background: linear-gradient(to right, #f7f7f7 50%, transparent 50%); }
+
+.date-footer {
+    display: flex;
+    gap: 10px;
+    padding-top: 15px;
+}
+
+.pill-btn {
+    padding: 8px 16px;
+    border-radius: 50px;
+    border: 1px solid #ddd;
+    background: white;
+    font-size: 13px;
+    cursor: pointer;
+    color: #222;
+}
+.pill-btn.active {
+    border-color: #222;
+    background: #f7f7f7;
+    font-weight: 600;
+}
+
+/* ================= TAB NGÀY LINH HOẠT ================= */
+.flexible-content {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.flex-section-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #222;
+    margin-bottom: 15px;
+}
+
+.flex-section-subtitle {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+/* Nhóm Radio Button theo chuẩn hình ảnh */
+.flex-duration-options {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    color: #333;
+}
+
+.radio-label input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #006ce4;
+}
+
+/* Khu vực tùy chỉnh khi chọn Khác */
+.custom-duration-wrapper {
+    margin-top: 15px;
+}
+
+.custom-label-small {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.custom-inputs-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.custom-night-counter {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #fff;
+    padding: 0 10px;
+    height: 40px;
+}
+
+.custom-night-counter input {
+    width: 30px;
+    text-align: left;
+    border: none;
+    font-size: 15px;
+    outline: none;
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+.custom-night-counter input::-webkit-outer-spin-button,
+.custom-night-counter input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.custom-night-counter span {
+    font-size: 14px;
+    color: #555;
+    border-left: 1px solid #ccc;
+    padding-left: 10px;
+}
+
+.custom-start-day select {
+    height: 40px;
+    padding: 0 15px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 15px;
+    cursor: pointer;
+    background: #fff;
+}
+
+/* Khối tháng */
+.flex-months-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.flex-months-grid {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    padding: 5px 0;
+    scroll-behavior: smooth;
+    scrollbar-width: none; /* Ẩn scrollbar Firefox */
+}
+
+.flex-months-grid::-webkit-scrollbar {
+    display: none; /* Ẩn scrollbar Chrome/Safari */
+}
+
+.flex-month-card {
+    min-width: 100px;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 20px 10px;
+    text-align: center;
+    cursor: pointer;
+    background: #fcfcfc;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.flex-month-card i {
+    font-size: 22px;
+    color: #999;
+}
+
+.flex-month-card .m-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #555;
+}
+
+.flex-month-card .m-year {
+    font-size: 13px;
+    color: #777;
+}
+
+.flex-month-card.active {
+    border: 2px solid #006ce4;
+    background: #f1f7ff;
+}
+
+.flex-month-card.active .m-label, 
+.flex-month-card.active i {
+    color: #006ce4;
+}
+
+.flex-scroll-right {
+    position: absolute;
+    right: -15px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    z-index: 2;
+}
+
+/* Footer Nút Chọn Của Ngày Linh Hoạt */
+.flex-summary-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #ebebeb;
+}
+
+.summary-text {
+    font-size: 15px;
+    color: #222;
+}
+
+.btn-select-flex {
+    background: #006ce4;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-select-flex:hover {
+    background: #0056b3;
+}
+/* ================= POPUP CHỌN KHÁCH ================= */
+.guest-popup {
+    position: absolute;
+    top: 120%;
+    right: 0;
+    background: #ffffff;
+    border-radius: 32px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.15);
+    width: 400px;
+    padding: 24px;
+    z-index: 999;
+    cursor: default;
+}
+
+.guest-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid #ebebeb;
+}
+
+.guest-row:last-of-type {
+    border-bottom: none;
+}
+
+.guest-type {
+    font-size: 16px;
+    font-weight: 600;
+    color: #222;
+}
+
+.guest-counter {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.guest-counter button {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid #b0b0b0;
+    background: #fff;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #717171;
+    transition: all 0.2s;
+}
+
+.guest-counter button:hover:not(:disabled) {
+    border-color: #222;
+    color: #222;
+}
+
+.guest-counter button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.guest-counter span {
+    font-size: 16px;
+    color: #222;
+    min-width: 20px;
+    text-align: center;
+}
+
+.guest-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 15px;
+}
+
+.btn-done-guest {
+    padding: 10px 20px;
+    background: #222;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-done-guest:hover {
+    background: #000;
+}

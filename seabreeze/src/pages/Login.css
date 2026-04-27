@@ -1,0 +1,176 @@
+/* --- Login.css --- */
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  padding: 20px;
+}
+
+.login-card {
+  background: white;
+  width: 100%;
+  max-width: 450px;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.login-card h2 {
+  font-size: 22px;
+  color: #222;
+  margin-bottom: 10px;
+}
+
+.login-subtitle {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+
+.social-login {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.btn-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 12px;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  position: relative;
+  transition: opacity 0.2s;
+}
+
+.btn-social:hover {
+  opacity: 0.9;
+}
+
+.btn-social span {
+  flex: 1;
+  text-align: center;
+}
+
+/* Tùy chỉnh riêng cho từng nút giống ảnh */
+.btn-google {
+  background-color: #2764e6;
+  color: white;
+  border: none;
+}
+
+.btn-google .icon-wrapper {
+  background: white;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 15px;
+}
+
+.btn-facebook {
+  background-color: white;
+  color: #2764e6;
+  border: 1px solid #cdd0d5;
+}
+
+.btn-facebook .social-icon {
+  font-size: 20px;
+  position: absolute;
+  left: 18px;
+}
+
+.btn-apple {
+  background-color: #222;
+  color: white;
+  border: none;
+}
+
+.btn-apple .social-icon {
+  font-size: 22px;
+  position: absolute;
+  left: 18px;
+  padding-bottom: 2px;
+}
+
+.divider-text {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 25px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.divider-text::before,
+.divider-text::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #eee;
+}
+
+.divider-text span {
+  padding: 0 15px;
+}
+
+/* Hiệu ứng viền input cắt ngang chữ */
+.input-group {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  position: absolute;
+  top: -8px;
+  left: 15px;
+  background: white;
+  padding: 0 5px;
+  font-size: 12px;
+  color: #666;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+}
+
+.input-group input:focus {
+  border-color: #2764e6;
+}
+
+.btn-continue {
+  width: 100%;
+  padding: 14px;
+  background-color: #eef2f9;
+  color: #a1b0cb;
+  border: none;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: not-allowed; /* Giả vờ nút đang mờ vì chưa điền email */
+  margin-bottom: 25px;
+}
+
+.other-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  color: #2764e6;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 15px;
+}
