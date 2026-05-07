@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// 1. Bảng Người dùng
+model NGUOIDUNG {
+  MANGUOIDUNG Int         @id @default(autoincrement())
+  HOTEN       String?
+  EMAIL       String      @unique
+  MATKHAU     String
+  SODIENTHOAI String?
+  AVATAR      String?     //  lưu đường dẫn ảnh
+  VAITRO      String      @default("Khách hàng")
+  TRANGTHAI   String      @default("Hoạt động")
+  DONHANG     DONHANG[]
+}
+
+// 2. Bảng Đơn hàng (Task 3 của Thịnh cần cái này)
+model DONHANG {
+  MADONHANG   Int          @id @default(autoincrement())
+  MANGUOIDUNG Int
+  NGAYDAT     DateTime     @default(now())
+  TONGTIEN    Float
+  TRANGTHAI   String       @default("Chưa xử lý") // Đã thanh toán, Đã hủy...
+
+  // Nối với bảng Người dùng
+  NGUOIDUNG   NGUOIDUNG    @relation(fields: [MANGUOIDUNG], references: [MANGUOIDUNG])
+  
+  // Quan hệ: Một đơn hàng có nhiều món đồ chi tiết
+  CT_DONHANG  CT_DONHANG[]
+}
+
+// 3. Bảng Chi tiết đơn hàng (Lưu món đồ cụ thể)
+model CT_DONHANG {
+  MACTDH      Int      @id @default(autoincrement())
+  MADONHANG   Int
+  LOAIDICHVU  String   // "Homestay" hoặc "Thuê đồ"
+  MADICHVU    String   // Mã phòng hoặc mã sản phẩm
+  SOLUONG     Int      @default(1)
+  GIABAN      Float
+  
+  // Nối với bảng Đơn hàng tổng
+  DONHANG     DONHANG  @relation(fields: [MADONHANG], references: [MADONHANG])
+  // --- BỔ SUNG: Liên kết tới bảng theo dõi trả đồ ---
+  THEODOITHUE THEODOITHUE?
+}
+
+// 4. Bảng Theo dõi đồ thuê (Phục vụ Task 4: Trả đồ và hoàn cọc)
+model THEODOITHUE {
+  MATHEODOI      Int      @id @default(autoincrement())
+  MACTDH         Int      @unique // Quan hệ 1-1 với chi tiết đơn hàng
+  TRANGTHAI_TRA  String   @default("Đang mượn") // Đang mượn, Đã trả, Hư hỏng/Mất
+  TIEN_HOAN_COC  Float    @default(0)           // Số tiền Admin sẽ trả lại
+  GHI_CHU        String?                        // Lời nhắn của Admin
+
+  // Nối với bảng Chi tiết đơn hàng
+  CT_DONHANG     CT_DONHANG @relation(fields: [MACTDH], references: [MACTDH])
+}

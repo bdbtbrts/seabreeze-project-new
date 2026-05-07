@@ -160,8 +160,20 @@
   border-radius: 50px;
   font-size: 16px;
   font-weight: bold;
-  cursor: not-allowed; /* Giả vờ nút đang mờ vì chưa điền email */
   margin-bottom: 25px;
+  cursor: pointer;          /* Biến con trỏ chuột thành hình bàn tay khi chỉ vào */
+  transition: all 0.2s ease; /* Tạo hiệu ứng đổi màu mượt mà */
+}
+
+.btn-continue:hover {
+  background-color: #007bb5; /* Đổi màu xanh đậm hơn một chút */
+  filter: brightness(1.2);    /* Tăng độ sáng lên 20% */
+  box-shadow: 0 4px 15px rgba(0, 155, 229, 0.4); /* Thêm đổ bóng cho lung linh */
+}
+
+/* Khi nhấn nút thì nó hơi lún xuống một tí cho thật */
+.btn-continue:active {
+  transform: scale(0.98);
 }
 
 .other-login {

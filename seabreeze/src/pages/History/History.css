@@ -1,0 +1,80 @@
+.history-container {
+  max-width: 900px;
+  margin: 50px auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.history-title {
+  text-align: center;
+  color: #009be5;
+  margin-bottom: 30px;
+  font-weight: 800;
+}
+
+.order-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.order-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  padding: 20px;
+  border-left: 6px solid #009be5; /* Vạch xanh cho đẹp */
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px inset #eee;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.order-body {
+  padding-left: 10px;
+}
+
+.order-item {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr 1fr;
+  padding: 8px 0;
+  font-size: 14px;
+}
+
+.item-type { color: #888; }
+.item-name { font-weight: 600; }
+
+.order-footer {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status-badge {
+  background: #e1f5fe;
+  color: #009be5;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+}
+
+.order-total b {
+  color: #ff4d4d;
+  font-size: 18px;
+}
+
+.no-orders {
+  text-align: center;
+  padding: 50px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  color: #777;
+}
