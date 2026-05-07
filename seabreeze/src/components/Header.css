@@ -79,15 +79,3 @@ nav a {
   cursor: pointer;
 }
 
-/* Ép toàn bộ chữ trong thanh tìm kiếm xài Arial */
-.search-bar-pill,
-.search-bar-pill *,
-.search-block,
-.block-label,
-.block-input,
-.block-text,
-.guest-type,
-.guest-desc,
-.btn-search-premium {
-    font-family: Arial, Helvetica, sans-serif !important;
-}

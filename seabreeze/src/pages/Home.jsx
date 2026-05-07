@@ -1,22 +1,46 @@
 import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate ở đầu file
+import { useCart } from '../context/CartContext'; // Import useCart để thêm đồ thuê vào giỏ
 import './Home.css';
 
 // Dữ liệu giả
 const allProducts = [
-    { id: 1, name: "Homestay Biển Xanh", price: 1200000, type: "Homestay", location: "Vũng Tàu", img: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=500" },
-    { id: 2, name: "Ván Chèo SUP", price: 200000, type: "Cho thuê", location: "Vũng Tàu", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8RDxEftnIFFTlU7fKv8uYHAU0mZiM_N_Wlg&s" },
-    { id: 3, name: "Cabin Gỗ Thông", price: 1500000, type: "Homestay", location: "Đà Lạt", img: "https://images.unsplash.com/photo-1587061949409-02df41d5e562?w=500" },
-    { id: 4, name: "Căn hộ View Hồ", price: 2500000, type: "Homestay", location: "Đà Lạt", img: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500" },
-    { id: 5, name: "Xe máy phượt", price: 150000, type: "Cho thuê", location: "Đà Lạt", img: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=500" }
+    { id: 1, name: "Homestay Biển Xanh", price: 1200000, deposit: 0, type: "Homestay", location: "Vũng Tàu", img: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=500" },
+    { id: 2, name: "Ván Chèo SUP", price: 200000, deposit: 500000, type: "Cho thuê", location: "Vũng Tàu", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8RDxEftnIFFTlU7fKv8uYHAU0mZiM_N_Wlg&s" },
+    { id: 3, name: "Cabin Gỗ Thông", price: 1500000, deposit: 0, type: "Homestay", location: "Đà Lạt", img: "https://images.unsplash.com/photo-1587061949409-02df41d5e562?w=500" },
+    { id: 4, name: "Căn hộ View Hồ", price: 2500000, deposit: 0, type: "Homestay", location: "Đà Lạt", img: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500" },
+    { id: 5, name: "Xe máy phượt", price: 150000, deposit: 1000000, type: "Cho thuê", location: "Đà Lạt", img: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=500" }
 ];
 
 function Home() {
+    const navigate = useNavigate();
+    const { addToCart } = useCart(); // Lấy hàm addToCart từ Context
+
     const highestPrice = Math.max(...allProducts.map(item => item.price));
 
     const [searchTerm, setSearchTerm] = useState("");
     const [maxPrice, setMaxPrice] = useState(highestPrice);
     const [filteredData, setFilteredData] = useState(allProducts);
     const [showLocationPopup, setShowLocationPopup] = useState(false);
+
+    // --- LOGIC XỬ LÝ NÚT BẤM DỰA VÀO LOẠI SẢN PHẨM ---
+    const handleActionClick = (item) => {
+        if (item.type === "Homestay") {
+            // Nếu là Homestay -> Bay sang trang Checkout Homestay
+            navigate('/checkout-homestay', { state: { homestay: item } });
+        } else {
+            // Nếu là Đồ thuê -> Thêm vào giỏ hàng
+            addToCart({
+                id: item.id,
+                name: item.name,
+                price: item.price,
+                deposit: item.deposit,
+                image: item.img,
+                type: 'accessory'
+            });
+            alert(`Đã thêm ${item.name} vào giỏ hàng!`);
+        }
+    };
 
     const handleSelectLocation = (locationName) => {
         setSearchTerm(locationName);
@@ -35,11 +59,11 @@ function Home() {
     const [exactTolerance, setExactTolerance] = useState('exact');
 
     // State của Ngày linh hoạt
-    const [flexDuration, setFlexDuration] = useState('other'); // weekend, 1week, 2weeks, 1month, other
+    const [flexDuration, setFlexDuration] = useState('other'); 
     const [flexCustomNights, setFlexCustomNights] = useState(1);
-    const [flexStartDay, setFlexStartDay] = useState('Thứ Năm'); // T2 -> CN
-    const [flexSelectedMonths, setFlexSelectedMonths] = useState([]); // Chứa id các tháng được chọn (tối đa 3)
-    const [savedFlexSummary, setSavedFlexSummary] = useState(""); // Lưu lại chuỗi hiển thị trên thanh tìm kiếm
+    const [flexStartDay, setFlexStartDay] = useState('Thứ Năm'); 
+    const [flexSelectedMonths, setFlexSelectedMonths] = useState([]); 
+    const [savedFlexSummary, setSavedFlexSummary] = useState(""); 
 
     // --- LOGIC SINH RA 13 THÁNG TỚI CHO NGÀY LINH HOẠT ---
     const upcomingMonths = useMemo(() => {
@@ -122,7 +146,7 @@ function Home() {
             if (prev.length < 3) {
                 return [...prev, monthId];
             }
-            return prev; // Đã chọn 3 tháng thì không cho chọn thêm
+            return prev; 
         });
     };
 
@@ -148,18 +172,17 @@ function Home() {
         return `${durationText} trong ${monthNames}`;
     };
 
-    // Nút Chọn ở Ngày linh hoạt
     const handleSelectFlex = () => {
         setSavedFlexSummary(getFlexSummaryText());
         setShowDatePopup(false);
     };
+
     // --- STATE CHO PHẦN KHÁCH ---
     const [showGuestPopup, setShowGuestPopup] = useState(false);
     const [adults, setAdults] = useState(0);
     const [children, setChildren] = useState(0);
     const [pets, setPets] = useState(0);
 
-    // Hàm để hiển thị text tóm tắt trên thanh search
     const getGuestSummary = () => {
         const total = adults + children;
         if (total === 0 && pets === 0) return "Thêm khách";
@@ -197,7 +220,6 @@ function Home() {
     const handleSearch = () => applyFilters(searchTerm, maxPrice);
     const handleKeyDown = (e) => { if (e.key === 'Enter') handleSearch(); };
 
-    // Text hiển thị trên thanh Search Block Date
     const renderBlockDateText = () => {
         if (dateTab === 'calendar') {
             if (startDate) {
@@ -213,7 +235,6 @@ function Home() {
     };
 
     return (
-        
         <main>
             {/* --- PHẦN TÌM KIẾM --- */}
             <section className="search-section-premium">
@@ -265,7 +286,6 @@ function Home() {
                         <div className="block-content" onClick={() => {
                             setShowDatePopup(true);
                             setShowLocationPopup(false);
-                            // Sổ xuống mặc định vào mục Lịch
                             setDateTab('calendar');
                         }}>
                             <div className="block-label">Thời gian</div>
@@ -274,7 +294,6 @@ function Home() {
                             </div>
                         </div>
 
-                        {/* POPUP THỜI GIAN */}
                         {showDatePopup && (
                             <div className="date-popup">
                                 <div className="date-tabs-wrapper">
@@ -284,7 +303,6 @@ function Home() {
                                     </div>
                                 </div>
 
-                                {/* ===== TAB LỊCH ===== */}
                                 {dateTab === 'calendar' && (
                                     <>
                                         <div className="calendars-wrapper">
@@ -302,7 +320,6 @@ function Home() {
                                     </>
                                 )}
 
-                                {/* ===== TAB NGÀY LINH HOẠT ===== */}
                                 {dateTab === 'flexible' && (
                                     <div className="flexible-content">
                                         <div className="flex-section">
@@ -381,7 +398,6 @@ function Home() {
                                             </div>
                                         </div>
 
-                                        {/* NÚT CHỌN THÊM VÀO THEO YÊU CẦU */}
                                         <div className="flex-summary-footer">
                                             <span className="summary-text">{getFlexSummaryText()}</span>
                                             <button className="btn-select-flex" onClick={handleSelectFlex}>Chọn</button>
@@ -394,78 +410,69 @@ function Home() {
 
                     <div className="divider"></div>
 
-                    {/* Lớp phủ để click ra ngoài thì đóng popup khách */}
-{showGuestPopup && (
-    <div 
-        style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 900 }} 
-        onClick={() => setShowGuestPopup(false)}
-    ></div>
-)}
+                    {showGuestPopup && (
+                        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 900 }} onClick={() => setShowGuestPopup(false)}></div>
+                    )}
 
-<div className="search-block guest-block" id="blockGuest" style={{ zIndex: 901 }}>
-    <div className="block-content" onClick={() => {
-        setShowGuestPopup(true);
-        setShowLocationPopup(false);
-        setShowDatePopup(false);
-    }}>
-        <div className="block-label">Khách</div>
-        <div className="block-text" style={{ color: (adults + children + pets) > 0 ? '#222' : '#6a6a6a' }}>
-            {getGuestSummary()}
-        </div>
-    </div>
+                    <div className="search-block guest-block" id="blockGuest" style={{ zIndex: 901 }}>
+                        <div className="block-content" onClick={() => {
+                            setShowGuestPopup(true);
+                            setShowLocationPopup(false);
+                            setShowDatePopup(false);
+                        }}>
+                            <div className="block-label">Khách</div>
+                            <div className="block-text" style={{ color: (adults + children + pets) > 0 ? '#222' : '#6a6a6a' }}>
+                                {getGuestSummary()}
+                            </div>
+                        </div>
 
-    {/* POPUP CHỌN KHÁCH */}
-    {showGuestPopup && (
-        <div className="guest-popup">
-            <div className="guest-row">
-                <div className="guest-info">
-                    <div className="guest-type">Người lớn</div>
-                    <div className="guest-desc">Từ 13 tuổi trở lên</div>
-                </div>
-               <div className="guest-counter">
-                    <button onClick={() => setAdults(Math.max(0, adults - 1))} disabled={adults === 0}>−</button>
-                    <span>{adults}</span>
-                    {/* Thêm disabled chặn giới hạn 20 */}
-                    <button onClick={() => setAdults(adults + 1)} disabled={adults + children + pets >= 20}>+</button>
-                </div>
-            </div>
+                        {showGuestPopup && (
+                            <div className="guest-popup">
+                                <div className="guest-row">
+                                    <div className="guest-info">
+                                        <div className="guest-type">Người lớn</div>
+                                        <div className="guest-desc">Từ 13 tuổi trở lên</div>
+                                    </div>
+                                    <div className="guest-counter">
+                                        <button onClick={() => setAdults(Math.max(0, adults - 1))} disabled={adults === 0}>−</button>
+                                        <span>{adults}</span>
+                                        <button onClick={() => setAdults(adults + 1)} disabled={adults + children + pets >= 20}>+</button>
+                                    </div>
+                                </div>
 
-            <div className="guest-row">
-                <div className="guest-info">
-                    <div className="guest-type">Trẻ em</div>
-                    <div className="guest-desc">Độ tuổi 2 – 12</div>
-                </div>
-                <div className="guest-counter">
-                    <button onClick={() => setChildren(Math.max(0, children - 1))} disabled={children === 0}>−</button>
-                    <span>{children}</span>
-                    {/* Thêm disabled chặn giới hạn 20 */}
-                    <button onClick={() => setChildren(children + 1)} disabled={adults + children + pets >= 20}>+</button>
-                </div>
-            </div>
+                                <div className="guest-row">
+                                    <div className="guest-info">
+                                        <div className="guest-type">Trẻ em</div>
+                                        <div className="guest-desc">Độ tuổi 2 – 12</div>
+                                    </div>
+                                    <div className="guest-counter">
+                                        <button onClick={() => setChildren(Math.max(0, children - 1))} disabled={children === 0}>−</button>
+                                        <span>{children}</span>
+                                        <button onClick={() => setChildren(children + 1)} disabled={adults + children + pets >= 20}>+</button>
+                                    </div>
+                                </div>
 
-            <div className="guest-row">
-                <div className="guest-info">
-                    <div className="guest-type">Thú cưng</div>
-                </div>
-                <div className="guest-counter">
-                <button onClick={() => setPets(Math.max(0, pets - 1))} disabled={pets === 0}>−</button>
-                <span>{pets}</span>
-                {/* Thêm disabled chặn giới hạn 20 */}
-                <button onClick={() => setPets(pets + 1)} disabled={adults + children + pets >= 20}>+</button>
-            </div>
-            </div>
+                                <div className="guest-row">
+                                    <div className="guest-info">
+                                        <div className="guest-type">Thú cưng</div>
+                                    </div>
+                                    <div className="guest-counter">
+                                        <button onClick={() => setPets(Math.max(0, pets - 1))} disabled={pets === 0}>−</button>
+                                        <span>{pets}</span>
+                                        <button onClick={() => setPets(pets + 1)} disabled={adults + children + pets >= 20}>+</button>
+                                    </div>
+                                </div>
 
-            <div className="guest-footer">
-                <button className="btn-done-guest" onClick={() => setShowGuestPopup(false)}>Xong</button>
-            </div>
-        </div>
-    )}
+                                <div className="guest-footer">
+                                    <button className="btn-done-guest" onClick={() => setShowGuestPopup(false)}>Xong</button>
+                                </div>
+                            </div>
+                        )}
 
-    <button className="btn-search-premium" onClick={handleSearch}>
-        <i className="fa-solid fa-magnifying-glass"></i> Tìm kiếm
-    </button>
-</div>
-
+                        <button className="btn-search-premium" onClick={handleSearch}>
+                            <i className="fa-solid fa-magnifying-glass"></i> Tìm kiếm
+                        </button>
+                    </div>
                 </div>
             </section>
 
@@ -611,14 +618,20 @@ function Home() {
                                 <h3 className="card-title">{item.name}</h3>
                                 <p className="card-location">📍 {item.location}</p>
                                 <p className="card-price"><strong>{item.price.toLocaleString()} ₫</strong> / ngày</p>
-                                <button className="btn-book">Đặt ngay</button>
+                                {/* --- NÚT BẤM ĐÃ ĐƯỢC XỬ LÝ ĐỘNG --- */}
+                                <button 
+                                    className="btn-book" 
+                                    onClick={() => handleActionClick(item)}
+                                >
+                                    {item.type === "Homestay" ? "Đặt ngay" : "Thêm vào giỏ"}
+                                </button>
                             </div>
                         </div>
                     ))}
 
                     {filteredData.length === 0 && (
                         <p style={{ textAlign: 'center', width: '100%', padding: '20px' }}>
-                            Không tìm thấy kết quả nào phù hợp với "{searchTerm}" m ơi! 😅
+                            Không tìm thấy kết quả phù hợp với "{searchTerm}" 
                         </p>
                     )}
                 </div>
