@@ -691,3 +691,96 @@
 .btn-done-guest:hover {
     background: #000;
 }
+/* Tối ưu Grid hiển thị */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Tự động chia cột */
+    gap: 25px;
+    padding: 20px 0;
+}
+
+.card {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #eee;
+    background: #fff;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover; /* Giúp ảnh không bị méo */
+}
+
+/* Pagination Styling - Trông giống các trang hiện đại */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 50px;
+}
+
+.pagination-btn {
+    padding: 10px 18px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.pagination-btn.active {
+    background-color: #ff385c; /* Màu thương hiệu giống Airbnb */
+    color: white;
+    border-color: #ff385c;
+}
+
+.pagination-btn:hover:not(.disabled) {
+    background-color: #f7f7f7;
+    border-color: #222;
+}
+/* --- TÍNH NĂNG YÊU THÍCH (WISHLIST) --- */
+.card-img-wrapper {
+  position: relative; 
+}
+
+.heart-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px; 
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+.heart-btn:hover {
+  transform: scale(1.1); 
+  background: #fff;
+}
+
+.heart-btn.active {
+  animation: popHeart 0.3s ease;
+}
+
+@keyframes popHeart {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}

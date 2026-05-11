@@ -1,24 +1,26 @@
-import Register from './pages/Register/Register';
-import './App.css';
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+// Import các trang và component
 import Header from './components/Header';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import './index.css'; // Gọi CSS cũ của bạn vào đây
+import Register from './pages/Register/Register';
 import Profile from './pages/Profile/Profile';
 import History from './pages/History/History';
 import RentalTracking from './pages/Rental/RentalTracking';
+import HomestayDetail from './pages/HomestayDetail'; 
 
-
+// Import CSS
+import './App.css';
+import './index.css';
 
 function App() {
   return (
     <BrowserRouter>
-      {/* Cái Header nằm ngoài Routes nên trang nào nó cũng hiện ra */}
+      {/* Header hiện ở mọi trang */}
       <Header />
       
-      {/* Routes là cái hành lang chứa các căn phòng */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -26,6 +28,9 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/history" element={<History />} />
         <Route path="/tracking" element={<RentalTracking />} />
+        
+        {/* Trang chi tiết của Hiền */}
+        <Route path="/homestay/:id" element={<HomestayDetail />} />
       </Routes>
     </BrowserRouter>
   );
