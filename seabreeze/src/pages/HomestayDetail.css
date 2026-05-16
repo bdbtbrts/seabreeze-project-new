@@ -1,0 +1,371 @@
+/* Container chính */
+.hd-main-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+/* Nút quay lại */
+.hd-back-btn {
+    background: none;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    color: #555;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.hd-back-btn:hover {
+    color: #007bff; /* Thay bằng var(--primary-color) nếu bạn có đặt trong index.css */
+}
+
+/* Layout 2 cột */
+.hd-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+/* CỘT TRÁI */
+.hd-image-wrapper {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.hd-main-img {
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+    display: block;
+}
+.hd-location-badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.hd-info {
+    margin-top: 25px;
+}
+.hd-title {
+    font-size: 32px;
+    margin: 0 0 10px 0;
+    color: #222;
+}
+.hd-price {
+    font-size: 24px;
+    font-weight: bold;
+    color: #ff385c; /* Màu nhấn giống Airbnb */
+    margin: 0 0 15px 0;
+}
+.hd-price span {
+    font-size: 16px;
+    font-weight: normal;
+    color: #777;
+}
+.hd-description {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #555;
+}
+
+.hd-divider {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 40px 0;
+}
+
+/* KHU VỰC THUÊ ĐỒ KÈM */
+.hd-rental-section h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+.hd-rental-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+.hd-rental-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fafafa;
+    transition: box-shadow 0.2s;
+}
+.hd-rental-card:hover {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+.rental-info h3 {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+}
+.rental-info p {
+    margin: 3px 0;
+    font-size: 14px;
+    color: #555;
+}
+.rental-deposit {
+    color: #e67e22 !important;
+}
+.btn-add-rental {
+    background: #e8f0fe;
+    color: #1a73e8;
+    border: 1px solid #c6dafc;
+    padding: 8px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+.btn-add-rental:hover {
+    background: #1a73e8;
+    color: white;
+}
+
+/* CỘT PHẢI - FORM ĐẶT PHÒNG STICKY */
+.hd-booking-card {
+    border: 1px solid #ddd;
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    position: sticky;
+    top: 90px; /* Cố định trượt theo khi cuộn trang */
+    background: white;
+}
+.hd-booking-card h3 {
+    margin: 0 0 20px 0;
+    font-size: 22px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+}
+
+.hd-form-group {
+    margin-bottom: 15px;
+}
+.hd-form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+.hd-form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: inherit;
+    box-sizing: border-box;
+    outline: none;
+}
+.hd-form-group input:focus {
+    border-color: #007bff;
+}
+
+/* GIỎ ĐỒ THUÊ TRONG FORM */
+.hd-selected-rentals {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 15px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.hd-selected-rentals h4 {
+    margin: 0 0 15px 0;
+    font-size: 14px;
+    text-transform: uppercase;
+    color: #555;
+}
+.rentals-list {
+    max-height: 250px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+/* Tùy chỉnh thanh cuộn */
+.rentals-list::-webkit-scrollbar { width: 5px; }
+.rentals-list::-webkit-scrollbar-thumb { background: #ccc; border-radius: 5px; }
+
+.selected-rental-item {
+    background: white;
+    border: 1px solid #eee;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+.sr-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.sr-name {
+    font-weight: bold;
+    color: #1a73e8;
+    font-size: 14px;
+}
+.sr-header button {
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    font-size: 16px;
+}
+.sr-inputs {
+    display: flex;
+    gap: 10px;
+}
+.sr-input-group {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+.sr-input-group label {
+    font-size: 12px;
+    color: #777;
+    margin-bottom: 4px;
+}
+.sr-input-group input {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-align: center;
+}
+
+/* NÚT THÊM VÀO GIỎ HÀNG */
+.btn-add-to-cart {
+    width: 100%;
+    background: #007bff; /* Đổi màu xanh biển giống SeaBreeze */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 10px;
+}
+.btn-add-to-cart:hover {
+    background: #0056b3;
+}
+
+/* RESPONSIVE MÀN HÌNH NHỎ */
+@media (max-width: 900px) {
+    .hd-grid {
+        grid-template-columns: 1fr; /* Rớt cột phải xuống dưới cột trái */
+    }
+    .hd-booking-card {
+        position: static; /* Tắt sticky trên điện thoại */
+    }
+}
+/* Container chính */
+.hd-main-container {
+    max-width: 1200px;
+    margin: 80px auto;
+    padding: 20px;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Nút quay lại */
+.hd-back-btn {
+    border: none;
+    background: none;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    color: #666;
+}
+
+/* Chia bố cục 2 cột: Trái 65% - Phải 35% */
+.hd-grid {
+    display: grid;
+    grid-template-columns: 1.8fr 1.2fr;
+    gap: 40px;
+}
+
+/* Hình ảnh chính */
+.hd-image-wrapper {
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    height: 450px;
+}
+
+.hd-main-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Phần thuê đồ kèm theo - Dạng Grid mini */
+.hd-rental-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.hd-rental-card {
+    border: 1px solid #eee;
+    padding: 15px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f9f9f9;
+}
+
+/* Sidebar đặt phòng bên phải (Sticky - Trượt theo màn hình) */
+.hd-sidebar-right {
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+}
+
+.hd-booking-card {
+    border: 1px solid #ddd;
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+}
+
+.btn-add-to-cart {
+    width: 100%;
+    background: linear-gradient(to right, #E61E4D 0%, #E31C5F 50%, #D70466 100%);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+/* Responsive cho điện thoại */
+@media (max-width: 768px) {
+    .hd-grid {
+        grid-template-columns: 1fr;
+    }
+    .hd-rental-grid {
+        grid-template-columns: 1fr;
+    }
+}

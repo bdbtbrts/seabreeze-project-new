@@ -1,6 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate ở đầu file
 import { useCart } from '../context/CartContext'; // Import useCart để thêm đồ thuê vào giỏ
+import React, { useState, useMemo, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './Home.css';
 
 // Dữ liệu giả
@@ -10,6 +12,18 @@ const allProducts = [
     { id: 3, name: "Cabin Gỗ Thông", price: 1500000, deposit: 0, type: "Homestay", location: "Đà Lạt", img: "https://images.unsplash.com/photo-1587061949409-02df41d5e562?w=500" },
     { id: 4, name: "Căn hộ View Hồ", price: 2500000, deposit: 0, type: "Homestay", location: "Đà Lạt", img: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500" },
     { id: 5, name: "Xe máy phượt", price: 150000, deposit: 1000000, type: "Cho thuê", location: "Đà Lạt", img: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=500" }
+    { id: 1, name: "Homestay Biển Xanh", price: 1200000, type: "Homestay", location: "Vũng Tàu", img: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=500" },
+    { id: 2, name: "Ván Chèo SUP", price: 200000, type: "Cho thuê", location: "Vũng Tàu", img: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=500" },
+    { id: 3, name: "Cabin Gỗ Thông", price: 1500000, type: "Homestay", location: "Đà Lạt", img: "https://images.unsplash.com/photo-1587061949409-02df41d5e562?w=500" },
+    { id: 4, name: "Căn hộ View Hồ", price: 2500000, type: "Homestay", location: "Đà Lạt", img: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500" },
+    { id: 5, name: "Xe máy phượt", price: 150000, type: "Cho thuê", location: "Đà Lạt", img: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=500" },
+    { id: 6, name: "Villa Sunset", price: 3500000, type: "Homestay", location: "Vũng Tàu", img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=500" },
+    { id: 7, name: "Lều cắm trại cao cấp", price: 300000, type: "Cho thuê", location: "Đà Lạt", img: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=500" },
+    { id: 8, name: "Homestay Phố Cổ", price: 900000, type: "Homestay", location: "Hà Nội", img: "https://plus.unsplash.com/premium_photo-1684445035187-c4bc7c96bc5d?w=500" },
+    { id: 9, name: "Xe đạp điện", price: 100000, type: "Cho thuê", location: "Hà Nội", img: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=500" },
+    { id: 10, name: "Căn hộ Studio", price: 1100000, type: "Homestay", location: "Hà Nội", img: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=500" },
+    { id: 11, name: "Bộ đồ bơi chuyên nghiệp", price: 50000, type: "Cho thuê", location: "Vũng Tàu", img: "https://plus.unsplash.com/premium_photo-1667509204238-aa06114f2964?w=800" },
+    { id: 12, name: "Nhà Gỗ Ven Suối", price: 1800000, type: "Homestay", location: "Đà Lạt", img: "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=500" }
 ];
 
 function Home() {
@@ -42,6 +56,26 @@ function Home() {
         }
     };
 
+// 1. CHÈN THÊM STATE VÀ HÀM CHO NÚT THẢ TIM Ở ĐÂY
+    // ==============================================================
+    const [favorites, setFavorites] = useState(() => {
+        const savedFavorites = localStorage.getItem('favorites');
+        return savedFavorites ? JSON.parse(savedFavorites) : [];
+    });
+    const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
+    const toggleFavorite = (e, id) => {
+        e.preventDefault(); // Chặn việc tự động cuộn hoặc nhảy trang
+        e.stopPropagation();
+        let updatedFavorites;
+        if (favorites.includes(id)) {
+            updatedFavorites = favorites.filter(favId => favId !== id);
+        } else {
+            updatedFavorites = [...favorites, id];
+        }
+        setFavorites(updatedFavorites);
+        localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+    };
+    // --- STATE CHO PHẦN LỊCH VÀ POPUP ---
     const handleSelectLocation = (locationName) => {
         setSearchTerm(locationName);
         setShowLocationPopup(false);
@@ -192,6 +226,22 @@ function Home() {
         if (pets > 0) parts.push(`${pets} thú cưng`);
         return parts.join(", ");
     };
+// --- CODE PHÂN TRANG CẢI TIẾN ---
+const [currentPage, setCurrentPage] = useState(1);
+const itemsPerPage = 4; // Đổi từ 2 lên 8 để grid trông chuyên nghiệp hơn
+
+useEffect(() => {
+    setCurrentPage(1);
+}, [filteredData, searchTerm, showOnlyFavorites]); // Reset trang khi search hoặc filter
+// 2. THÊM ĐOẠN NÀY: Lọc data dựa trên việc có đang bật xem yêu thích hay không
+const finalDataToDisplay = showOnlyFavorites 
+    ? filteredData.filter(item => favorites.includes(item.id)) 
+    : filteredData;
+
+const indexOfLastItem = currentPage * itemsPerPage;
+const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+const currentItems = finalDataToDisplay.slice(indexOfFirstItem, indexOfLastItem);
+const totalPages = Math.ceil(finalDataToDisplay.length / itemsPerPage);
 
     // --- LOGIC TÌM KIẾM ---
     const applyFilters = (text, price) => {
@@ -599,6 +649,21 @@ function Home() {
                     >
                         Tìm kiếm
                     </button>
+{/* 3. THÊM NÚT XEM DANH SÁCH YÊU THÍCH Ở ĐÂY */}
+                    <button
+                        style={{ 
+                            padding: '10px 20px', 
+                            background: showOnlyFavorites ? '#ff4d4f' : '#f0f0f0', 
+                            color: showOnlyFavorites ? 'white' : 'black', 
+                            border: '1px solid #ddd', 
+                            borderRadius: '4px', 
+                            cursor: 'pointer',
+                            fontWeight: 'bold'
+                        }}
+                        onClick={() => setShowOnlyFavorites(!showOnlyFavorites)}
+                    >
+                        {showOnlyFavorites ? '🔙 Quay lại tất cả' : `❤️ Xem phòng yêu thích (${favorites.length})`}
+                    </button>
 
                     <div className="price-filter" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <label>Mức giá tối đa:</label>
@@ -609,10 +674,27 @@ function Home() {
                     </div>
                 </div>
 
-                <div id="productGrid" className="product-grid">
-                    {filteredData.map((item) => (
-                        <div className="card" key={item.id}>
-                            <img src={item.img} alt={item.name} />
+              <div id="productGrid" className="product-grid">
+                    {currentItems.map((item) => (
+                        <div 
+                            className="card" 
+                            key={item.id}
+                            onClick={() => navigate('/homestay/' + item.id)} /* <-- THÊM DÒNG NÀY ĐỂ CLICK CẢ CARD */
+                            style={{ cursor: 'pointer' }} /* <-- Chuột biến thành hình bàn tay khi di qua card */
+                        >
+                            
+                            {/* ---- 2. SỬA LẠI KHỐI NÀY: BỌC ẢNH VÀ NÚT TIM VÀO DIV ---- */}
+                            <div className="card-img-wrapper" style={{ position: 'relative' }}>
+                                <img src={item.img} alt={item.name} />
+                                <button 
+                                    className={`heart-btn ${favorites.includes(item.id) ? 'active' : ''}`}
+                                    onClick={(e) => toggleFavorite(e, item.id)}
+                                >
+                                   {favorites.includes(item.id) ? '❤️' : '🤍'}
+                                </button>
+                            </div>
+                            {/* -------------------------------------------------------- */}
+
                             <div className="card-info">
                                 <span className="type-badge">{item.type}</span>
                                 <h3 className="card-title">{item.name}</h3>
@@ -625,10 +707,55 @@ function Home() {
                                 >
                                     {item.type === "Homestay" ? "Đặt ngay" : "Thêm vào giỏ"}
                                 </button>
+                                
+                                {/* <-- ĐÃ ĐỔI THẺ <Link> THÀNH THẺ <div> Ở DÒNG DƯỚI --> */}
+                                <div className="btn-book" style={{display: 'inline-block', textAlign: 'center', textDecoration: 'none'}}>Đặt ngay</div>
                             </div>
                         </div>
                     ))}
+{/* --- THANH ĐIỀU HƯỚNG PHÂN TRANG --- */}
+{totalPages > 1 && (
+    <div className="pagination-container" style={{ display: 'flex', justifyContent: 'center', gap: '8px', margin: '40px 0' }}>
+        
+        {/* Nút Trước */}
+        <button 
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            style={{ padding: '8px 16px', borderRadius: '5px', border: '1px solid #ccc', cursor: currentPage === 1 ? 'not-allowed' : 'pointer', backgroundColor: '#f8f9fa' }}
+        >
+            &laquo; Trước
+        </button>
 
+        {/* Các nút số trang */}
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map(number => (
+            <button
+                key={number}
+                onClick={() => setCurrentPage(number)}
+                style={{
+                    padding: '8px 16px',
+                    borderRadius: '5px',
+                    border: '1px solid #ccc',
+                    cursor: 'pointer',
+                    backgroundColor: currentPage === number ? '#007bff' : '#fff',
+                    color: currentPage === number ? '#fff' : '#333',
+                    fontWeight: currentPage === number ? 'bold' : 'normal'
+                }}
+            >
+                {number}
+            </button>
+        ))}
+
+        {/* Nút Sau */}
+        <button 
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+            style={{ padding: '8px 16px', borderRadius: '5px', border: '1px solid #ccc', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer', backgroundColor: '#f8f9fa' }}
+        >
+            Sau &raquo;
+        </button>
+        
+    </div>
+)}
                     {filteredData.length === 0 && (
                         <p style={{ textAlign: 'center', width: '100%', padding: '20px' }}>
                             Không tìm thấy kết quả phù hợp với "{searchTerm}" 
