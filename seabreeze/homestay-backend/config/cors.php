@@ -19,7 +19,10 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['https://seabreeze-booking-3da2xbfk7-8386.vercel.app'],
+    'allowed_origins' => [
+    env('FRONTEND_URL', 'https://seabreeze-project-new.vercel.app'),
+    'http://localhost:5173', 
+],
 
     'allowed_origins_patterns' => [],
 
