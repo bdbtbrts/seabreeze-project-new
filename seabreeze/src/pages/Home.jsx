@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios'; 
+import api from '../api';
 import { useCart } from '../context/CartContext';
 import './Home.css';
 import api from '../api';

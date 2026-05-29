@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import './History.css'; // M tạo file css này để làm đẹp nhé
 
 export default function History() {
