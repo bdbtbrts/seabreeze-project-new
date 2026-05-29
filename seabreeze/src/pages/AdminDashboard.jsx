@@ -2,6 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './AdminDashboard.css';
+import api from '../api'; // Đường dẫn tới file vừa tạo
+
+// Thay vì axios.get('http://localhost...'), m sửa thành:
+api.get('/api/admin/dashboard-stats');
+api.get('/api/rooms');
 
 export default function AdminDashboard() {
     const navigate = useNavigate();

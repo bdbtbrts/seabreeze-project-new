@@ -56,7 +56,8 @@ app.post('/api/upload-avatar', upload.single('avatar'), async (req, res) => {
       return res.status(400).json({ error: "Thịnh ơi, server chưa nhận được file ảnh!" });
     }
 
-    const avatarUrl = `http://localhost:5000/uploads/${req.file.filename}`;
+    const APP_URL = process.env.APP_URL || 'http://localhost:5000';
+const avatarUrl = `${APP_URL}/uploads/${req.file.filename}`;
 
     // Cập nhật đường dẫn ảnh vào Database
     const updatedUser = await prisma.nGUOIDUNG.update({
