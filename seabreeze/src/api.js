@@ -1,11 +1,13 @@
-// file api.js
 import axios from 'axios';
 
-// M thử console.log ra xem nó là cái gì khi chạy trên Vercel
-console.log("URL từ môi trường:", import.meta.env.VITE_API_URL);
-console.log("DEBUG - VITE_API_URL hiện tại là:", import.meta.env.VITE_API_URL);
+// Dùng trực tiếp link để kiểm tra xem nó có còn trỏ về localhost không
+const renderUrl = 'https://seabreeze-backend-wkqw.onrender.com';
+const apiUrl = import.meta.env.VITE_PROD_URL || renderUrl;
+
+console.log("DEBUG - URL đang sử dụng:", apiUrl);
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_PROD_URL || 'https://seabreeze-backend-wkqw.onrender.com',
+  baseURL: apiUrl,
 });
 
 export default api;
