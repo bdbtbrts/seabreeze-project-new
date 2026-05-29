@@ -11,12 +11,13 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use Illuminate\Support\Facades\Artisan;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-// --- CÁC ROUTE CÔNG KHAI ---//
+// --- CÁC ROUTE CÔNG KHAI ---//git add homestay-backend/routes/api.php
 Route::get('/rooms', [RoomController::class, 'index']);
 Route::get('/rooms/{id}', [RoomController::class, 'show']);
 Route::get('/rooms/{id}/reviews', [ReviewController::class, 'getRoomReviews']);
@@ -72,3 +73,22 @@ Route::get('/admin/promotions', [PromotionController::class, 'index']);
 Route::post('/admin/promotions', [PromotionController::class, 'store']);
 Route::delete('/admin/promotions/{id}', [PromotionController::class, 'destroy']);
 Route::post('/check-promo', [PromotionController::class, 'checkPromo']);
+
+Route::get('/run-migrations', function () {
+    try {
+        // Chạy lệnh clear cache trước cho chắc
+        Artisan::call('config:clear');
+        
+        // Chạy lệnh migrate
+        Artisan::call('migrate', ['--force' => true]);
+        
+        return response()->json([
+            'message' => 'Migrate thành công rực rỡ!', 
+            'output' => Artisan::output()
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => 'Lỗi rồi: ' . $e->getMessage()
+        ], 500);
+    }
+});
