@@ -22,8 +22,8 @@ function Home() {
     // 2. LOGIC LẤY DATA
     useEffect(() => {
         Promise.all([
-            axios.get('/api/rooms'),
-            axios.get('/api/accessories')
+            api.get('/api/rooms'),
+            api.get('/api/accessories')
         ])
         .then(([roomsRes, accRes]) => {
             const dbRooms = roomsRes.data.data || [];
