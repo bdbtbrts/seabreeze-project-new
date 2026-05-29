@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './AdminDashboard.css';
-import api from '../api'; // Đường dẫn tới file vừa tạo
-
-// Thay vì axios.get('http://localhost...'), m sửa thành:
-api.get('/api/admin/dashboard-stats');
-api.get('/api/rooms');
+import api from '../api'; 
 
 export default function AdminDashboard() {
     const navigate = useNavigate();
@@ -28,7 +23,7 @@ export default function AdminDashboard() {
     // Hàm lấy token gộp chung cho tiện
     const getToken = () => localStorage.getItem('token');
     
-    // Cấu hình header chung cho các lệnh axios (Xóa, Sửa, Thêm)
+    // Cấu hình header chung cho các lệnh gọi API (Xóa, Sửa, Thêm)
     const getAuthHeader = () => ({
         headers: {
             'Authorization': `Bearer ${getToken()}`,
@@ -38,7 +33,7 @@ export default function AdminDashboard() {
 
     const fetchDashboardStats = () => {
         setLoading(true);
-        axios.get('http://localhost/api/admin/dashboard-stats')
+        api.get('/api/admin/dashboard-stats')
             .then(res => { setDashboardStats(res.data); setLoading(false); })
             .catch(err => { console.error("Lỗi lấy thống kê:", err); setLoading(false); });
     };
@@ -46,35 +41,35 @@ export default function AdminDashboard() {
     // --- CÁC HÀM FETCH DỮ LIỆU ---
     const fetchAllRooms = () => {
         setLoading(true);
-        axios.get('http://localhost/api/rooms')
+        api.get('/api/rooms')
             .then(res => { setAllRooms(res.data.data || []); setLoading(false); })
             .catch(err => { console.error("Lỗi lấy dữ liệu phòng:", err); setLoading(false); });
     };
 
     const fetchAllOrders = () => {
         setLoading(true);
-        axios.get('http://localhost/api/orders')
+        api.get('/api/orders')
             .then(res => { setAllOrders(res.data.data || []); setLoading(false); })
             .catch(err => { console.error("Lỗi lấy dữ liệu đơn hàng:", err); setLoading(false); });
     };
 
     const fetchAllRentals = () => {
         setLoading(true);
-        axios.get('http://localhost/api/admin/rentals')
+        api.get('/api/admin/rentals')
             .then(res => { setAllRentals(res.data.data || []); setLoading(false); })
             .catch(err => { console.error("Lỗi lấy danh sách đơn thuê:", err); setLoading(false); });
     };
 
     const fetchAllUsers = () => {
         setLoading(true);
-        axios.get('http://localhost/api/admin/users')
+        api.get('/api/admin/users')
             .then(res => { setAllUsers(res.data); setLoading(false); })
             .catch(err => { console.error("Lỗi lấy user:", err); setLoading(false); });
     };
 
     const fetchAllPromotions = () => {
         setLoading(true);
-        axios.get('http://localhost/api/admin/promotions')
+        api.get('/api/admin/promotions')
             .then(res => { setAllPromotions(res.data); setLoading(false); })
             .catch(err => { console.error("Lỗi tải khuyến mãi:", err); setLoading(false); });
     };
@@ -91,14 +86,14 @@ export default function AdminDashboard() {
 
     // --- CÁC HÀM THAO TÁC ADMIN (ĐÃ GẮN TOKEN ĐẦY ĐỦ) ---
     const handleApproveRoom = (id) => {
-        axios.put(`http://localhost/api/admin/rooms/${id}/approve`, {}, getAuthHeader())
+        api.put(`/api/admin/rooms/${id}/approve`, {}, getAuthHeader())
             .then(res => { alert("Đã duyệt phòng thành công!"); fetchAllRooms(); })
             .catch(err => alert("Lỗi khi duyệt phòng: " + err.message));
     };
 
     const handleRejectRoom = (id) => {
         if (window.confirm("Bạn có chắc chắn muốn xóa phòng này khỏi hệ thống?")) {
-            axios.delete(`http://localhost/api/rooms/${id}`, getAuthHeader())
+            api.delete(`/api/rooms/${id}`, getAuthHeader())
             .then(res => { 
                 alert("Đã xóa phòng."); 
                 fetchAllRooms(); 
@@ -114,7 +109,7 @@ export default function AdminDashboard() {
         if (!window.confirm("Bạn có chắc chắn muốn xóa phòng này không?")) return;
 
         try {
-            await axios.delete(`http://localhost/api/rooms/${roomId}`, getAuthHeader());
+            await api.delete(`/api/rooms/${roomId}`, getAuthHeader());
             alert("🎉 Đã xóa phòng thành công!");
             fetchAllRooms();
         } catch (error) {
@@ -123,11 +118,10 @@ export default function AdminDashboard() {
         }
     };
     
-    // Gắn thêm hàm Xóa Đơn Phòng (vì dưới JSX m gọi mà chưa khai báo)
     const handleDeleteOrder = (orderId) => {
         if (!window.confirm("Bạn có chắc chắn muốn hủy/xóa đơn đặt phòng này?")) return;
         
-        axios.delete(`http://localhost/api/orders/${orderId}`, getAuthHeader())
+        api.delete(`/api/orders/${orderId}`, getAuthHeader())
             .then(res => {
                 alert("Đã hủy đơn phòng thành công!");
                 fetchAllOrders();
@@ -144,14 +138,14 @@ export default function AdminDashboard() {
             note = window.prompt("Nhập ghi chú hư hỏng và số tiền trừ cọc (nếu có):");
             if (note === null) return;
         }
-        axios.put(`http://localhost/api/admin/rentals/${id}/status`, { status: newStatus, admin_note: note }, getAuthHeader())
+        api.put(`/api/admin/rentals/${id}/status`, { status: newStatus, admin_note: note }, getAuthHeader())
             .then(res => { alert("Đã cập nhật trạng thái đơn thuê thành công!"); fetchAllRentals(); })
             .catch(err => alert("Lỗi khi cập nhật đơn thuê: " + err.message));
     };
 
     const handleAddPromotion = (e) => {
         e.preventDefault();
-        axios.post('http://localhost/api/admin/promotions', newPromo, getAuthHeader())
+        api.post('/api/admin/promotions', newPromo, getAuthHeader())
             .then(() => {
                 alert("Tạo mã thành công!");
                 setNewPromo({ code: '', discount_percent: '', applicable_type: 'all' });
@@ -161,7 +155,7 @@ export default function AdminDashboard() {
 
     const handleDeletePromotion = (id) => {
         if (window.confirm("Chắc chắn muốn xóa mã này?")) {
-            axios.delete(`http://localhost/api/admin/promotions/${id}`, getAuthHeader())
+            api.delete(`/api/admin/promotions/${id}`, getAuthHeader())
                  .then(fetchAllPromotions)
                  .catch(err => alert("Lỗi xóa mã!"));
         }
@@ -169,7 +163,7 @@ export default function AdminDashboard() {
 
     const handleToggleUserStatus = (id, currentStatus) => {
         const newStatus = currentStatus === 'Hoạt động' ? 'Bị khóa' : 'Hoạt động';
-        axios.put(`http://localhost/api/admin/users/${id}/status`, { status: newStatus }, getAuthHeader())
+        api.put(`/api/admin/users/${id}/status`, { status: newStatus }, getAuthHeader())
             .then(() => fetchAllUsers())
             .catch(err => alert("Lỗi cập nhật trạng thái User!"));
     }

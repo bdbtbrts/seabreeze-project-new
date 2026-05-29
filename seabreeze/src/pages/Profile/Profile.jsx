@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Profile.css'; 
+import api from '../api';
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -35,52 +36,47 @@ const Profile = () => {
     formData.append('email', user?.email);
 
     try {
-      // Đã gộp token chính xác vào headers của hàm upload ảnh
-      const response = await fetch('http://localhost/api/upload-avatar', {
-        method: 'POST',
+      // Đổi fetch thành api.post
+      const response = await api.post('/api/upload-avatar', formData, {
         headers: {
           'Authorization': `Bearer ${token}` 
-        },
-        body: formData,
+        }
       });
 
-      const data = await response.json();
-      if (response.ok) {
-        setAvatar(data.avatarUrl);
-        const updatedUser = { ...user, AVATAR: data.avatarUrl }; 
-        localStorage.setItem('user', JSON.stringify(updatedUser));
-        setUser(updatedUser);
-        alert("🎉 Cập nhật ảnh đại diện thành công!");
-      } else {
-        alert("❌ Lỗi: " + (data.error || data.message || "Không thể upload"));
-      }
+      const data = response.data; // Axios tự động parse JSON
+      setAvatar(data.avatarUrl);
+      const updatedUser = { ...user, AVATAR: data.avatarUrl }; 
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      setUser(updatedUser);
+      alert("🎉 Cập nhật ảnh đại diện thành công!");
+
     } catch (error) {
-      alert("⚠️ Lỗi kết nối server khi tải ảnh!");
+      const errorMessage = error.response?.data?.error || error.response?.data?.message || "Không thể upload";
+      alert("❌ Lỗi: " + errorMessage);
     }
   };
 
   const handleUpdateProfile = async () => {
     try {
-      const response = await fetch('http://localhost/api/update-profile', {
-        method: 'PUT',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` // Kẹp token bảo mật
-        },
-        body: JSON.stringify({ email: user.email, soDienThoai }),
-      });
+      // Đổi fetch thành api.put
+      const response = await api.put('/api/update-profile', 
+        { email: user.email, soDienThoai },
+        {
+          headers: { 
+            'Authorization': `Bearer ${token}` // Kẹp token bảo mật
+          }
+        }
+      );
 
-      const data = await response.json();
-      if (response.ok) {
-        alert("🎉 Thành công: " + data.message);
-        const updatedUser = { ...user, soDienThoai: data.user.soDienThoai };
-        localStorage.setItem('user', JSON.stringify(updatedUser));
-        setUser(updatedUser);
-      } else {
-        alert("❌ Lỗi: " + (data.error || data.message));
-      }
+      const data = response.data;
+      alert("🎉 Thành công: " + data.message);
+      const updatedUser = { ...user, soDienThoai: data.user.soDienThoai };
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      setUser(updatedUser);
+
     } catch (error) {
-      alert("⚠️ Lỗi kết nối server!");
+      const errorMessage = error.response?.data?.error || error.response?.data?.message || "Lỗi kết nối server!";
+      alert("❌ Lỗi: " + errorMessage);
     }
   };
 
@@ -90,28 +86,26 @@ const Profile = () => {
     }
 
     try {
-      const response = await fetch('http://localhost/api/change-password', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` // Kẹp token bảo mật
-        },
-        body: JSON.stringify({ 
+      // Đổi fetch thành api.post
+      const response = await api.post('/api/change-password', 
+        { 
           email: user.email, 
           oldPassword: passwords.oldPassword, 
           newPassword: passwords.newPassword 
-        }),
-      });
+        },
+        {
+          headers: { 
+            'Authorization': `Bearer ${token}` // Kẹp token bảo mật
+          }
+        }
+      );
 
-      const data = await response.json();
-      if (response.ok) {
-        alert("🎉 Đổi mật khẩu thành công!");
-        setPasswords({ oldPassword: '', newPassword: '', confirmPassword: '' });
-      } else {
-        alert("❌ Lỗi: " + (data.error || data.message));
-      }
+      alert("🎉 Đổi mật khẩu thành công!");
+      setPasswords({ oldPassword: '', newPassword: '', confirmPassword: '' });
+
     } catch (error) {
-      alert("⚠️ Lỗi kết nối server!");
+      const errorMessage = error.response?.data?.error || error.response?.data?.message || "Lỗi kết nối server!";
+      alert("❌ Lỗi: " + errorMessage);
     }
   };
 

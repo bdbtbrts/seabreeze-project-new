@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './Register.css'; 
+import api from '../api';
 
 const Register = () => {
   // Đã sửa key cho khớp với cột trong MySQL của Laravel
@@ -24,7 +25,7 @@ const Register = () => {
 
     try {
       // Đã sửa lại đường dẫn API trỏ về Laravel
-      const response = await fetch('http://localhost/api/register', {
+      const response = await api.post('/api/register', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

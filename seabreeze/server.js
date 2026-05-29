@@ -14,12 +14,22 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const prisma = new PrismaClient();
 
-app.use(cors());
+// --- 1. CẤU HÌNH CORS PHẢI ĐẶT TRÊN CÙNG ---
+app.use(cors({
+  origin: [
+    'http://localhost:5173', // Mở cửa cho test local máy m hoặc máy Thịnh
+    'http://localhost:5174', // Mở cửa cho test local (nếu dùng port này)
+    'https://seabreeze-booking.vercel.app', 
+    'https://seabreeze-booking-git-main-8386.vercel.app'
+  ],
+  credentials: true
+}));
+
 app.use(express.json());
 
 // --- CẤU HÌNH LƯU TRỮ ẢNH VỚI MULTER ---
 
-// 1. Tự động tạo thư mục 'uploads' nếu chưa có để tránh lỗi server
+// Tự động tạo thư mục 'uploads' nếu chưa có để tránh lỗi server
 const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
@@ -53,11 +63,12 @@ app.post('/api/upload-avatar', upload.single('avatar'), async (req, res) => {
     
     // Kiểm tra xem file đã lên tới server chưa
     if (!req.file) {
-      return res.status(400).json({ error: "Thịnh ơi, server chưa nhận được file ảnh!" });
+      return res.status(400).json({ error: "Server chưa nhận được file ảnh!" });
     }
 
+    // ĐÂY LÀ CHỖ ĂN TIỀN: Lấy APP_URL từ Render, nếu test máy Thịnh thì nó lấy localhost
     const APP_URL = process.env.APP_URL || 'http://localhost:5000';
-const avatarUrl = `${APP_URL}/uploads/${req.file.filename}`;
+    const avatarUrl = `${APP_URL}/uploads/${req.file.filename}`;
 
     // Cập nhật đường dẫn ảnh vào Database
     const updatedUser = await prisma.nGUOIDUNG.update({
@@ -171,16 +182,10 @@ app.get('/api/orders/:email', async (req, res) => {
   }
 });
 
-const PORT = 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server bộ não đang chạy tại http://localhost:${PORT}`);
-});
-
-
-
+// 7. API Lấy lịch sử đồ thuê (Đã gom chung lên trên đây)
 app.get('/api/rental-tracking/:email', async (req, res) => {
   const { email } = req.params;
-  console.log("🔍 Đang tìm đồ thuê cho email:", email); // Dòng kiểm tra 1
+  console.log("🔍 Đang tìm đồ thuê cho email:", email);
   try {
     const tracking = await prisma.tHEODOITHUE.findMany({
       where: {
@@ -190,10 +195,17 @@ app.get('/api/rental-tracking/:email', async (req, res) => {
       },
       include: { CT_DONHANG: true }
     });
-    console.log("📊 Dữ liệu tìm thấy:", tracking); // Dòng kiểm tra 2
+    console.log("📊 Dữ liệu tìm thấy:", tracking);
     res.status(200).json(tracking);
   } catch (error) {
     console.error("❌ Lỗi query:", error);
     res.status(500).json({ error: "Lỗi lấy dữ liệu theo dõi!" });
   }
+});
+
+// --- BẬT SERVER ĐÚNG CHUẨN RENDER ---
+// Lấy Port của môi trường (Render), nếu code chạy máy Thịnh thì nó lấy Port 5000
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server bộ não đang chạy tại Port: ${PORT}`);
 });

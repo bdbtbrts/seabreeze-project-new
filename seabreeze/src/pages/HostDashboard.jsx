@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api'; // Gọi bộ não api vào
 import './HostDashboard.css';
 
 export default function HostDashboard() {
@@ -37,7 +37,7 @@ export default function HostDashboard() {
     // --- HÀM LẤY DATA PHÒNG TỪ BACKEND ---
     const fetchRooms = () => {
         setLoadingRooms(true);
-        axios.get('http://localhost/api/rooms')
+        api.get('/api/rooms')
             .then(res => {
                 const allRooms = res.data.data || [];
                 const myOwnRooms = allRooms.filter(room => room.host_id === currentUser?.id);
@@ -54,7 +54,7 @@ export default function HostDashboard() {
     const handleUpdateRoom = async () => {
         try {
             const token = localStorage.getItem('token');
-            await axios.put(`http://localhost/api/rooms/${editingRoom.id}`, editingRoom, {
+            await api.put(`/api/rooms/${editingRoom.id}`, editingRoom, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             alert("Cập nhật phòng thành công!");
@@ -70,7 +70,7 @@ export default function HostDashboard() {
         if (window.confirm("Bạn có chắc muốn xóa phòng này không?")) {
             try {
                 const token = localStorage.getItem('token');
-                await axios.delete(`http://localhost/api/rooms/${id}`, {
+                await api.delete(`/api/rooms/${id}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 alert("Xóa thành công!");
@@ -90,7 +90,7 @@ export default function HostDashboard() {
         if (!currentUser) return;
         setLoadingReviews(true);
         const token = localStorage.getItem('token');
-        axios.get(`http://localhost/api/host/${currentUser.id}/reviews`, {
+        api.get(`/api/host/${currentUser.id}/reviews`, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(res => { setAllReviews(res.data); setLoadingReviews(false); })
@@ -100,7 +100,7 @@ export default function HostDashboard() {
     const handleDeleteReview = (id) => {
         if (window.confirm("Bạn có chắc muốn xóa đánh giá này khỏi phòng của mình không?")) {
             const token = localStorage.getItem('token');
-            axios.delete(`http://localhost/api/host/reviews/${id}`, {
+            api.delete(`/api/host/reviews/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
                 .then(() => { alert("Đã xóa đánh giá thành công!"); fetchHostReviews(); })
@@ -111,7 +111,7 @@ export default function HostDashboard() {
     // --- HÀM XỬ LÝ KHO ĐỒ THUÊ ---
     const fetchMyAccessories = () => {
         if (!currentUser) return;
-        axios.get('http://localhost/api/accessories')
+        api.get('/api/accessories')
             .then(res => {
                 const allAcc = res.data.data || res.data || [];
                 const myAcc = allAcc.filter(acc => acc.host_id === currentUser.id);
@@ -127,12 +127,12 @@ export default function HostDashboard() {
 
         if (accForm.id) {
             // Edit
-            axios.put(`http://localhost/api/accessories/${accForm.id}`, payload, config)
+            api.put(`/api/accessories/${accForm.id}`, payload, config)
                 .then(() => { alert("Cập nhật đồ thuê thành công!"); setShowAccessoryModal(false); fetchMyAccessories(); })
                 .catch(err => alert("Lỗi cập nhật: " + err.message));
         } else {
             // Create
-            axios.post('http://localhost/api/accessories', payload, config)
+            api.post('/api/accessories', payload, config)
                 .then(() => { alert("Thêm vào kho thành công!"); setShowAccessoryModal(false); fetchMyAccessories(); })
                 .catch(err => alert("Lỗi thêm: " + err.message));
         }
@@ -141,7 +141,7 @@ export default function HostDashboard() {
     const handleDeleteAccessory = (id) => {
         if (window.confirm("Chắc chắn muốn xóa đồ thuê này khỏi kho?")) {
             const token = localStorage.getItem('token');
-            axios.delete(`http://localhost/api/accessories/${id}`, {
+            api.delete(`/api/accessories/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
                 .then(() => fetchMyAccessories())
@@ -154,7 +154,7 @@ export default function HostDashboard() {
         setLoadingOrders(true);
         const token = localStorage.getItem('token');
 
-        axios.get('http://localhost/api/orders', {
+        api.get('/api/orders', {
             headers: { Authorization: `Bearer ${token}` }
         })
         .then(res => {
@@ -172,7 +172,7 @@ export default function HostDashboard() {
     // --- HÀM XỬ LÝ ĐƠN HÀNG (XÁC NHẬN / HỦY) ---
     const handleConfirmOrder = (id) => {
         const token = localStorage.getItem('token');
-        axios.put(`http://localhost/api/orders/${id}/confirm`, {}, {
+        api.put(`/api/orders/${id}/confirm`, {}, {
             headers: { Authorization: `Bearer ${token}` }
         })
         .then(res => {
@@ -185,7 +185,7 @@ export default function HostDashboard() {
     const handleCancelOrder = (id) => {
         if (window.confirm("Bạn có chắc chắn muốn hủy đơn đặt phòng này không? Hành động này sẽ xóa dữ liệu đơn vĩnh viễn!")) {
             const token = localStorage.getItem('token');
-            axios.delete(`http://localhost/api/orders/${id}`, {
+            api.delete(`/api/orders/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
             .then(res => {
@@ -214,7 +214,7 @@ export default function HostDashboard() {
         };
 
         const token = localStorage.getItem('token');
-        axios.post('http://localhost/api/rooms', roomData, {
+        api.post('/api/rooms', roomData, {
             headers: { Authorization: `Bearer ${token}` }
         })
         .then(res => {

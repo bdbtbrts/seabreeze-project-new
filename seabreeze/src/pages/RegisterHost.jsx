@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import api from '../api';
 
 export default function RegisterHost() {
     const navigate = useNavigate();
@@ -40,7 +41,7 @@ export default function RegisterHost() {
 
         try {
             // Gọi API chọc xuống Laravel để đổi Role
-            const res = await axios.put(`http://localhost/api/users/${currentUser.id}/upgrade-host`, {
+            const res = await api.put(`/api/users/${currentUser.id}/upgrade-host`, {
                 name: formData.name,
                 phone: formData.phone,
                 cccd: formData.cccd,

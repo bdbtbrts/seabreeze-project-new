@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios'; 
 import { useCart } from '../context/CartContext';
 import './Home.css';
+import api from '../api';
 
 function Home() {
     const navigate = useNavigate();
@@ -22,8 +23,8 @@ function Home() {
     // 2. LOGIC LẤY DATA
     useEffect(() => {
         Promise.all([
-            axios.get('http://localhost/api/rooms'),
-            axios.get('http://localhost/api/accessories')
+            axios.get('/api/rooms'),
+            axios.get('/api/accessories')
         ])
         .then(([roomsRes, accRes]) => {
             const dbRooms = roomsRes.data.data || [];

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api'; // Thêm bộ não api vào đây
 import './HomestayDetail.css';
 
 export default function HomestayDetail() {
@@ -38,8 +38,8 @@ export default function HomestayDetail() {
     const [showAmenitiesModal, setShowAmenitiesModal] = useState(false);
 
     useEffect(() => {
-        // Load danh sách đánh giá
-        axios.get(`http://localhost/api/rooms/${id || 1}/reviews`)
+        // Load danh sách đánh giá - ĐÃ SỬA THÀNH API
+        api.get(`/api/rooms/${id || 1}/reviews`)
             .then(res => {
                 const formattedReviews = res.data.map(r => {
                     const d = new Date(r.created_at);
@@ -54,18 +54,17 @@ export default function HomestayDetail() {
             })
             .catch(error => console.error("Lỗi tải đánh giá:", error));
 
-        // Load danh sách tất cả phụ kiện
-        axios.get('http://localhost/api/accessories')
+        // Load danh sách tất cả phụ kiện - ĐÃ SỬA THÀNH API
+        api.get('/api/accessories')
             .then(res => {
                 const accData = res.data.data || res.data || [];
-                // T in ra log để m F12 xem tên thật của biến trong DB là gì cho chắc ăn nhé
                 console.log("DỮ LIỆU PHỤ KIỆN TỪ DB:", accData);
                 setAllAccessories(accData);
             })
             .catch(error => console.error("Lỗi tải phụ kiện:", error));
 
-        // Load thông tin phòng
-        axios.get(`http://localhost/api/rooms/${id || 1}`)
+        // Load thông tin phòng - ĐÃ SỬA THÀNH API
+        api.get(`/api/rooms/${id || 1}`)
             .then(res => {
                 const apiData = res.data.data || res.data;
 
@@ -155,7 +154,8 @@ export default function HomestayDetail() {
             return;
         }
 
-        axios.post('http://localhost/api/check-promo', { code: promoCode })
+        // ĐÃ SỬA THÀNH API
+        api.post('/api/check-promo', { code: promoCode })
             .then(res => {
                 setDiscountPercent(res.data.discount_percent);
                 setPromoMsg({ text: `🎉 Áp dụng thành công! Giảm ${res.data.discount_percent}%`, type: 'success' });
@@ -190,7 +190,6 @@ export default function HomestayDetail() {
     const basePrice = homestay ? homestay.price : 0;
     const totalRoomPrice = basePrice * (nights > 0 ? nights : 1);
 
-    // Đã làm hàm "Bao trọn ổ" dò tìm biến giá tiền (price, gia_thue, price_per_day...)
     const totalRentalPrice = selectedRentals.reduce((sum, item) => {
         const rawPrice = item.price || item.gia_thue || item.price_per_day || item.rental_price || item.gia || 0;
         const cleanPrice = Math.floor(Number(String(rawPrice).replace(/,/g, '')) || 0);
@@ -237,7 +236,8 @@ export default function HomestayDetail() {
         const currentUser = JSON.parse(storedUser);
 
         try {
-            const res = await axios.post('http://localhost/api/reviews', {
+            // ĐÃ SỬA THÀNH API
+            const res = await api.post('/api/reviews', {
                 user_id: currentUser.id,
                 room_id: id || 1,
                 rating: newReviewRating,
@@ -455,8 +455,10 @@ export default function HomestayDetail() {
 
                                     // Dò tìm hình ảnh và tự ghép URL Laravel
                                     const accImg = item.image || item.img || item.hinh_anh || item.photo || item.thumbnail;
+                                    
+                                    
                                     const finalImgUrl = accImg
-                                        ? (accImg.startsWith('http') ? accImg : `http://localhost/storage/${accImg}`)
+                                        ? (accImg.startsWith('http') ? accImg : `https://seabreeze-backend-wkqw.onrender.com/storage/${accImg}`)
                                         : "https://placehold.co/200";
 
                                     return (

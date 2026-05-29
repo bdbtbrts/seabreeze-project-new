@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useCart } from '../context/CartContext';
+import api from '../api';
 
 const CheckoutHomestay = () => {
   const location = useLocation();
@@ -41,7 +42,7 @@ const CheckoutHomestay = () => {
 
     setLoadingAccessories(true);
 
-    axios.get('http://localhost/api/accessories')
+      api.get('/api/rooms')
       .then(res => {
         const rawData = res.data.data || res.data || [];
 
@@ -102,7 +103,7 @@ const CheckoutHomestay = () => {
       const checkOutDate = bookingDates?.checkOut || new Date(Date.now() + 86400000).toISOString().split('T')[0];
 
       // Gửi request lên server
-      await axios.post('http://localhost/api/orders', {
+      await api.post('/api/orders', {
         room_id: homestay.id,
         customer_name: customerName,
         check_in: checkInDate,

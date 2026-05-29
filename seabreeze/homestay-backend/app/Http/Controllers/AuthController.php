@@ -42,6 +42,7 @@ class AuthController extends Controller
             'user' => $user
         ], 201);
     }
+
     public function login(Request $request)
     {
         // 1. Kiểm tra đầu vào
@@ -54,7 +55,6 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         // 3. KIỂM TRA MẬT KHẨU (Khúc này quan trọng nhất)
-        // Hàm Hash::check sẽ tự động lấy pass m nhập đối chiếu với pass đã mã hóa trong DB
         if (!$user || !\Illuminate\Support\Facades\Hash::check($request->password, $user->password)) {
             return response()->json([
                 'message' => 'Email hoặc mật khẩu không chính xác!'
@@ -72,25 +72,27 @@ class AuthController extends Controller
     }
 
     public function redirectToGoogle() {
-    return Socialite::driver('google')
+        return Socialite::driver('google')
             ->with(['prompt' => 'select_account']) 
             ->redirect();
     }
 
-// 2. Nhận kết quả từ Google
-public function handleGoogleCallback() {
-    $googleUser = Socialite::driver('google')->stateless()->user();
+    // 2. Nhận kết quả từ Google
+    public function handleGoogleCallback() {
+        $googleUser = Socialite::driver('google')->stateless()->user();
 
-    $user = User::updateOrCreate([
-        'email' => $googleUser->email,
-    ], [
-        'name' => $googleUser->name,
-        'password' => bcrypt('password123'), // Mật khẩu mặc định
-    ]);
+        $user = User::updateOrCreate([
+            'email' => $googleUser->email,
+        ], [
+            'name' => $googleUser->name,
+            'password' => bcrypt('password123'), 
+        ]);
 
-    $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $user->createToken('auth_token')->plainTextToken;
 
-    // Redirect về Frontend kèm Token
-    return redirect("http://localhost:5174/login?token={$token}&name=" . urlencode($user->name));
-}
+        // DÙNG HÀM env() ĐỂ LẤY LINK TỪ CẤU HÌNH, NẾU KHÔNG CÓ THÌ MẶC ĐỊNH LÀ LOCALHOST
+        $frontendUrl = env('FRONTEND_URL', 'http://localhost:5174');
+
+        return redirect($frontendUrl . "/login?token={$token}&name=" . urlencode($user->name));
+    }
 }

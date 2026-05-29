@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import api from '../api';
 
 export default function LoginHost() {
     const navigate = useNavigate();
@@ -9,7 +10,7 @@ export default function LoginHost() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost/api/login', formData);
+            const res = await api.post('/api/login', formData);
             const user = res.data.user;
 
             if (user.role === 'Chủ nhà' || user.role === 'Admin') {

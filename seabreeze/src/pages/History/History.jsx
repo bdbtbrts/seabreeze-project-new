@@ -11,7 +11,7 @@ export default function History() {
             try {
                 const token = localStorage.getItem('token');
                 // Gọi API lấy đơn hàng của chính user đang đăng nhập
-                const response = await axios.get('http://localhost/api/orders', {
+                const response = await api.get('/api/orders', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 

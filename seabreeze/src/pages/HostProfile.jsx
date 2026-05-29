@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './HostProfile.css';
-
+import api from '../api';
 export default function HostProfile() {
     
     const navigate = useNavigate();
@@ -11,7 +11,7 @@ export default function HostProfile() {
 
     useEffect(() => {
         // Lấy tất cả phòng từ API (giả sử tất cả phòng này đều là của host Hao)
-        axios.get('http://localhost/api/rooms')
+        api.get('/api/rooms')
             .then(res => {
                 // Lấy 3 phòng đầu tiên để làm "Bài đăng của Hao"
                 setHostListings(res.data.data.slice(0, 3));

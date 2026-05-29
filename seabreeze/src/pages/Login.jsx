@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
 import { FcGoogle } from 'react-icons/fc';
-import { FaFacebook, FaChevronDown } from 'react-icons/fa';
+import api from '../api'; // Lôi "bộ não" vào đây
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -23,17 +23,15 @@ function Login() {
     if (token) {
       localStorage.setItem('token', token);
 
-      // GỌI API LẤY INFO USER CÓ CẢ ROLE
-      fetch('http://localhost/api/user', {
+      // GỌI API LẤY INFO USER BẰNG axios api
+      api.get('/api/user', {
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Accept': 'application/json'
+          'Authorization': `Bearer ${token}`
         }
       })
-        .then(res => res.json())
-        .then(userData => {
+        .then(res => {
           // LƯU CẢ CỤC USER VÀO LOCALSTORAGE
-          localStorage.setItem('user', JSON.stringify(userData));
+          localStorage.setItem('user', JSON.stringify(res.data));
           alert("Đăng nhập thành công!");
           window.location.href = '/';
         })
@@ -43,8 +41,8 @@ function Login() {
 
   // 2. Hàm xử lý nhấn nút Google
   const handleGoogleLogin = () => {
-    // Redirect thẳng tới route Laravel
-    window.location.href = 'http://localhost/auth/google/redirect';
+    // Đã thay localhost thành link server Render chuẩn chỉnh
+    window.location.href = 'https://seabreeze-backend-wkqw.onrender.com/auth/google/redirect';
   };
 
   const handleChange = (e) => {
@@ -56,30 +54,22 @@ function Login() {
     setErrorMsg('');
 
     try {
-      const response = await fetch('http://localhost/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(formData),
-      });
+      // Đổi fetch thành api.post, tự động ăn link Render
+      const response = await api.post('/api/login', formData);
+      const data = response.data;
 
-      const data = await response.json();
-
-      if (response.ok) {
-        alert("Đăng nhập thành công! Chào " + data.user.name);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        const token = data.token || data.access_token;
-        if (token) {
-          localStorage.setItem('token', token);
-        }
-        window.location.href = '/';
-      } else {
-        setErrorMsg(data.message || "Email hoặc mật khẩu không đúng.");
+      alert("Đăng nhập thành công! Chào " + data.user.name);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      const token = data.token || data.access_token;
+      if (token) {
+        localStorage.setItem('token', token);
       }
+      window.location.href = '/';
+      
     } catch (error) {
-      setErrorMsg("Lỗi kết nối Server Laravel! Vui lòng thử lại sau.");
+      // Xử lý báo lỗi nếu sai pass hoặc email
+      const errorMessage = error.response?.data?.message || "Email hoặc mật khẩu không đúng.";
+      setErrorMsg(errorMessage);
     }
   };
 
@@ -94,7 +84,6 @@ function Login() {
         {errorMsg && <div style={{ color: 'red', marginBottom: '15px', textAlign: 'center', backgroundColor: '#fee2e2', padding: '10px', borderRadius: '5px' }}>{errorMsg}</div>}
 
         <div className="social-login">
-          {/* M ĐÃ GẮN handleGoogleLogin VÀO ĐÂY RỒI NÈ */}
           <button className="btn-social btn-google" onClick={handleGoogleLogin}>
             <div className="icon-wrapper"><FcGoogle size={18} /></div>
             <span>Đăng nhập bằng Google</span>
@@ -112,71 +101,67 @@ function Login() {
           </div>
           
           <div className="input-group">
-    {/* Bọc tất cả vào 1 div relative để dễ canh tọa độ */}
-<div style={{ position: 'relative', marginTop: '15px', marginBottom: '20px' }}>
-    
-    {/* Nhấc Label lên chèn ngang viền */}
-    <label style={{
-        position: 'absolute',
-        top: '-10px',           // Kéo tuột lên trên 10px để đè lên viền
-        left: '12px',           // Thụt vào trong 12px cho bằng với ô Email
-        background: '#fff',     // PHÉP THUẬT NẰM Ở ĐÂY: Nền trắng che mất cái viền bên dưới
-        padding: '0 5px',
-        fontSize: '13px',
-        color: '#666',
-        fontWeight: 'normal',
-        zIndex: 10              // Ưu tiên hiển thị lên trên cùng
-    }}>
-        Mật khẩu
-    </label>
-    
-    {/* Ô input */}
-    <input 
-        type={showPassword ? "text" : "password"} 
-        name="password" 
-        placeholder="Nhập mật khẩu" 
-        value={formData.password} 
-        onChange={handleChange} 
-        required 
-        style={{ 
-            width: '100%', 
-            padding: '14px 40px 14px 15px', // Trái/trên/dưới 15px, bên phải chừa 40px cho con mắt
-            boxSizing: 'border-box',
-            borderRadius: '8px',
-            border: '1px solid #ced4da',    // Màu viền xám nhạt
-            backgroundColor: '#f3f6fc',     // Màu nền hơi xanh xám giống y hệt ô Email của m
-            outline: 'none',
-            fontSize: '15px'
-        }} 
-    />
+            {/* Bọc tất cả vào 1 div relative để dễ canh tọa độ */}
+            <div style={{ position: 'relative', marginTop: '15px', marginBottom: '20px' }}>
+                
+                {/* Nhấc Label lên chèn ngang viền */}
+                <label style={{
+                    position: 'absolute',
+                    top: '-10px',          // Kéo tuột lên trên 10px để đè lên viền
+                    left: '12px',          // Thụt vào trong 12px cho bằng với ô Email
+                    background: '#fff',    // PHÉP THUẬT NẰM Ở ĐÂY: Nền trắng che mất cái viền bên dưới
+                    padding: '0 5px',
+                    fontSize: '13px',
+                    color: '#666',
+                    fontWeight: 'normal',
+                    zIndex: 10             // Ưu tiên hiển thị lên trên cùng
+                }}>
+                    Mật khẩu
+                </label>
+                
+                {/* Ô input */}
+                <input 
+                    type={showPassword ? "text" : "password"} 
+                    name="password" 
+                    placeholder="Nhập mật khẩu" 
+                    value={formData.password} 
+                    onChange={handleChange} 
+                    required 
+                    style={{ 
+                        width: '100%', 
+                        padding: '14px 40px 14px 15px', // Trái/trên/dưới 15px, bên phải chừa 40px cho con mắt
+                        boxSizing: 'border-box',
+                        borderRadius: '8px',
+                        border: '1px solid #ced4da',    // Màu viền xám nhạt
+                        backgroundColor: '#f3f6fc',     // Màu nền hơi xanh xám giống y hệt ô Email của m
+                        outline: 'none',
+                        fontSize: '15px'
+                    }} 
+                />
 
-    {/* Cục Icon con mắt */}
-    <i 
-        className={`fa-solid ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`} 
-        onClick={() => setShowPassword(!showPassword)}
-        style={{
-            position: 'absolute',
-            right: '15px',
-            top: '50%',
-            transform: 'translateY(-50%)',  // Ép nó nằm chính giữa theo chiều dọc
-            cursor: 'pointer',
-            color: '#666',
-            fontSize: '16px',
-            zIndex: 10
-        }}
-    ></i>
+                {/* Cục Icon con mắt */}
+                <i 
+                    className={`fa-solid ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`} 
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={{
+                        position: 'absolute',
+                        right: '15px',
+                        top: '50%',
+                        transform: 'translateY(-50%)',  // Ép nó nằm chính giữa theo chiều dọc
+                        cursor: 'pointer',
+                        color: '#666',
+                        fontSize: '16px',
+                        zIndex: 10
+                    }}
+                ></i>
 
-</div>
-</div>
+            </div>
+          </div>
           
-
           <button type="submit" className="btn-continue">Tiếp tục</button>
         </form>
 
-
       </div>
-
-
     </div>
   );
 }
