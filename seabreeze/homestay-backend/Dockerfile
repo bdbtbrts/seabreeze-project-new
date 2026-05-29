@@ -1,5 +1,5 @@
 # Sử dụng image PHP 8.2 có sẵn Apache
-FROM php:8.2-apache
+FROM php:8.4-apache
 
 # Cài đặt các thư viện cần thiết cho Laravel
 RUN apt-get update && apt-get install -y \
