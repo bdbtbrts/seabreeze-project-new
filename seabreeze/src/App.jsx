@@ -10,7 +10,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Cart from './pages/Cart'; 
 import CheckoutHomestay from './pages/CheckoutHomestay.jsx';
-import Register from './pages/Register/Register.jsx';
+import Register from './pages/Register.jsx';
 import Profile from './pages/Profile.jsx';
 import History from './pages/History.jsx';
 import HomestayDetail from './pages/HomestayDetail'; 
