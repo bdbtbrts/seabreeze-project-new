@@ -4,7 +4,7 @@ import axios from 'axios';
 const api = axios.create({
   baseURL: 'https://seabreeze-backend-wkqw.onrender.com/api', // Nhớ kiểm tra kỹ có cần '/api' hay không
   headers: {
-    'Content-Type': 'application/json',
+    'Content-Type': 'appligit cation/json',
   },
   
 });
