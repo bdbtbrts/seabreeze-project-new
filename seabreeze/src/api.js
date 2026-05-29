@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-// Dùng trực tiếp link để kiểm tra xem nó có còn trỏ về localhost không
-const renderUrl = 'https://seabreeze-backend-wkqw.onrender.com';
-const apiUrl = import.meta.env.VITE_PROD_URL || renderUrl;
-
-console.log("DEBUG - URL đang sử dụng:", apiUrl);
-
+// Tạo một instance của axios với cấu hình sẵn
 const api = axios.create({
-  baseURL: apiUrl,
+  baseURL: 'https://seabreeze-backend-wkqw.onrender.com/api', // Nhớ kiểm tra kỹ có cần '/api' hay không
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  
 });
 
+// Xuất ra để các file khác sử dụng
 export default api;
