@@ -23,7 +23,7 @@ function Home() {
     useEffect(() => {
         Promise.all([
             api.get('/api/rooms'),
-            api.get('/api/accessories')
+            api.get('/api/accessories'),
         ])
         .then(([roomsRes, accRes]) => {
             const dbRooms = roomsRes.data.data || [];
