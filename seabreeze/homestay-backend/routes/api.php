@@ -16,7 +16,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-// --- CÁC ROUTE CÔNG KHAI ---
+// --- CÁC ROUTE CÔNG KHAI ---//
 Route::get('/rooms', [RoomController::class, 'index']);
 Route::get('/rooms/{id}', [RoomController::class, 'show']);
 Route::get('/rooms/{id}/reviews', [ReviewController::class, 'getRoomReviews']);
