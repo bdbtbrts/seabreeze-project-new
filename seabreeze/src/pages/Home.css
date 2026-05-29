@@ -5,6 +5,7 @@
   justify-content: center;
   padding: 30px 20px 60px 20px;
   background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
+
 }
 
 .search-bar-pill {
@@ -15,6 +16,7 @@
   box-shadow: 0 3px 12px rgba(0,0,0,0.1);
   border: 1px solid #ddd;
   position: relative;
+  font-family: 'Inter', 'Roboto', 'Segoe UI', Arial, sans-serif;
 }
 
 /* Các khối tìm kiếm */
@@ -33,7 +35,7 @@
 .block-label { font-size: 12px; font-weight: 800; color: #222; margin-bottom: 2px; }
 
 .block-input, .block-text {
-  font-size: 14px; color: #6a6a6a; border: none; background: transparent;
+  font-size: 14px; color: #6a6a6a; border: none; background: transparent;font-family: inherit;
   outline: none; width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .block-input { width: 150px; color: #222; }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './Profile.css'; // --- PHẦN BỔ SUNG: Import file CSS mới tạo ---
+import './Profile.css'; 
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -11,14 +11,17 @@ const Profile = () => {
     confirmPassword: ''
   });
 
+  // Lấy token ra một lần ở đầu component để dùng chung
+  const token = localStorage.getItem('token');
+
   useEffect(() => {
     const savedUser = JSON.parse(localStorage.getItem('user'));
     if (savedUser) {
       setUser(savedUser);
       setSoDienThoai(savedUser.soDienThoai || '');
-      // Sửa nhẹ logic hiển thị ảnh: Ưu tiên ảnh Database -> LocalStorage -> Mặc định
-      setAvatar(savedUser.AVATAR || savedUser.avatar || 'https://logoseabreeze.png'); 
+      setAvatar(savedUser.AVATAR || savedUser.avatar || '/logoseabreeze.png'); 
     } else {
+      // CHỈ đá về trang login khi KHÔNG có dữ liệu user trong localStorage
       window.location.href = '/login';
     }
   }, []);
@@ -29,24 +32,27 @@ const Profile = () => {
 
     const formData = new FormData();
     formData.append('avatar', file);
-    formData.append('email', user.email);
+    formData.append('email', user?.email);
 
     try {
-      const response = await fetch('http://localhost:5000/api/upload-avatar', {
+      // Đã gộp token chính xác vào headers của hàm upload ảnh
+      const response = await fetch('http://localhost/api/upload-avatar', {
         method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}` 
+        },
         body: formData,
       });
 
       const data = await response.json();
       if (response.ok) {
         setAvatar(data.avatarUrl);
-        // Nhớ update đúng trường AVATAR cho đồng bộ database
         const updatedUser = { ...user, AVATAR: data.avatarUrl }; 
         localStorage.setItem('user', JSON.stringify(updatedUser));
         setUser(updatedUser);
         alert("🎉 Cập nhật ảnh đại diện thành công!");
       } else {
-        alert("❌ Lỗi: " + data.error);
+        alert("❌ Lỗi: " + (data.error || data.message || "Không thể upload"));
       }
     } catch (error) {
       alert("⚠️ Lỗi kết nối server khi tải ảnh!");
@@ -55,9 +61,12 @@ const Profile = () => {
 
   const handleUpdateProfile = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/update-profile', {
+      const response = await fetch('http://localhost/api/update-profile', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` // Kẹp token bảo mật
+        },
         body: JSON.stringify({ email: user.email, soDienThoai }),
       });
 
@@ -68,7 +77,7 @@ const Profile = () => {
         localStorage.setItem('user', JSON.stringify(updatedUser));
         setUser(updatedUser);
       } else {
-        alert("❌ Lỗi: " + data.error);
+        alert("❌ Lỗi: " + (data.error || data.message));
       }
     } catch (error) {
       alert("⚠️ Lỗi kết nối server!");
@@ -81,9 +90,12 @@ const Profile = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/change-password', {
+      const response = await fetch('http://localhost/api/change-password', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` // Kẹp token bảo mật
+        },
         body: JSON.stringify({ 
           email: user.email, 
           oldPassword: passwords.oldPassword, 
@@ -96,7 +108,7 @@ const Profile = () => {
         alert("🎉 Đổi mật khẩu thành công!");
         setPasswords({ oldPassword: '', newPassword: '', confirmPassword: '' });
       } else {
-        alert("❌ Lỗi: " + data.error);
+        alert("❌ Lỗi: " + (data.error || data.message));
       }
     } catch (error) {
       alert("⚠️ Lỗi kết nối server!");
@@ -106,25 +118,16 @@ const Profile = () => {
   if (!user) return <div className="profile-master-container">Đang tải hồ sơ...</div>;
 
   return (
-    // Áp dụng class bao ngoài
     <div className="profile-master-container">
-      {/* Khối thẻ chính */}
       <div className="profile-card">
-        <h1 className="profile-header-title">Hồ Sơ Cả Nhân</h1>
+        <h1 className="profile-header-title">Hồ Sơ Cá Nhân</h1>
         
         <div className="form-section">
-          
-          {/* --- GIAO DIỆN AVATAR (Class mới) --- */}
+          {/* --- GIAO DIỆN AVATAR --- */}
           <div className="avatar-section">
             <div className="avatar-wrapper">
-              <img 
-                src={avatar} 
-                alt="Avatar" 
-                className="avatar-image" // Class cho ảnh tròn
-              />
-              <label htmlFor="avatar-input" className="avatar-edit-label">
-                📷
-              </label>
+              <img src={avatar} alt="Avatar" className="avatar-image" />
+              <label htmlFor="avatar-input" className="avatar-edit-label">📷</label>
               <input 
                 id="avatar-input" 
                 type="file" 
@@ -133,18 +136,14 @@ const Profile = () => {
                 style={{ display: 'none' }} 
               />
             </div>
-            
-            <p className="profile-user-name">{user.hoTen}</p>
+            <p className="profile-user-name">{user.hoTen || user.name}</p>
             <p className="profile-user-email">{user.email}</p>
-            <span className="role-badge">
-              {user.vaiTro || 'Khách hàng'}
-            </span>
+            <span className="role-badge">{user.vaiTro || user.role || 'Khách hàng'}</span>
           </div>
           
-          {/* --- CẬP NHẬT THÔNG TIN (Class mới) --- */}
+          {/* --- CẬP NHẬT THÔNG TIN --- */}
           <div className="form-group">
             <h3 className="form-group-title">👤 Thông tin cơ bản</h3>
-            
             <div className="form-input-wrapper">
               <label className="form-label">Số điện thoại:</label>
               <input 
@@ -155,19 +154,12 @@ const Profile = () => {
                 className="form-input" 
               />
             </div>
-            
-            <button 
-              onClick={handleUpdateProfile}
-              className="btn-save-profile" // Class nút bấm mới
-            >
-              Lưu thay đổi
-            </button>
+            <button onClick={handleUpdateProfile} className="btn-save-profile">Lưu thay đổi</button>
           </div>
 
-          {/* --- ĐỔI MẬT KHẨU (Class mới) --- */}
+          {/* --- ĐỔI MẬT KHẨU --- */}
           <div className="form-group">
             <h3 className="form-group-title">🔒 Bảo mật tài khoản</h3>
-            
             <div className="form-input-wrapper">
               <input 
                 type="password" 
@@ -177,7 +169,6 @@ const Profile = () => {
                 className="form-input" 
               />
             </div>
-            
             <div className="form-input-wrapper">
               <input 
                 type="password" 
@@ -187,7 +178,6 @@ const Profile = () => {
                 className="form-input" 
               />
             </div>
-            
             <div className="form-input-wrapper">
               <input 
                 type="password" 
@@ -197,19 +187,13 @@ const Profile = () => {
                 className="form-input" 
               />
             </div>
-            
-            <button 
-              onClick={handleChangePassword}
-              className="btn-change-password" // Class nút lá cây bo góc
-            >
-              Đổi mật khẩu
-            </button>
+            <button onClick={handleChangePassword} className="btn-change-password">Đổi mật khẩu</button>
           </div>
 
-          {/* --- ĐĂNG XUẤT (Class nút viền đỏ xịn) --- */}
+          {/* --- ĐĂNG XUẤT --- */}
           <button 
             onClick={() => {
-              localStorage.removeItem('user');
+              localStorage.clear(); // Xóa sạch cả user lẫn token cho an toàn
               alert("👋 Đã đăng xuất thành công. Hẹn gặp lại!");
               window.location.href = '/login';
             }}

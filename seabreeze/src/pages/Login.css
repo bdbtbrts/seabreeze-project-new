@@ -89,18 +89,8 @@
   left: 18px;
 }
 
-.btn-apple {
-  background-color: #222;
-  color: white;
-  border: none;
-}
 
-.btn-apple .social-icon {
-  font-size: 22px;
-  position: absolute;
-  left: 18px;
-  padding-bottom: 2px;
-}
+
 
 .divider-text {
   display: flex;
@@ -152,23 +142,20 @@
 }
 
 .btn-continue {
-  width: 100%;
-  padding: 14px;
-  background-color: #eef2f9;
-  color: #a1b0cb;
-  border: none;
-  border-radius: 50px;
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 25px;
-  cursor: pointer;          /* Biến con trỏ chuột thành hình bàn tay khi chỉ vào */
-  transition: all 0.2s ease; /* Tạo hiệu ứng đổi màu mượt mà */
+    background-color: #007bff;  
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+     
+    transition: background-color 0.3s ease; 
 }
 
 .btn-continue:hover {
-  background-color: #007bb5; /* Đổi màu xanh đậm hơn một chút */
-  filter: brightness(1.2);    /* Tăng độ sáng lên 20% */
-  box-shadow: 0 4px 15px rgba(0, 155, 229, 0.4); /* Thêm đổ bóng cho lung linh */
+    background-color: #b5b5b5;  
 }
 
 /* Khi nhấn nút thì nó hơi lún xuống một tí cho thật */

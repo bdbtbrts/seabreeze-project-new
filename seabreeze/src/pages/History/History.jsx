@@ -1,70 +1,60 @@
 import React, { useState, useEffect } from 'react';
-import './History.css'; // Thịnh nhớ tạo file CSS này nhé
+import axios from 'axios';
+import './History.css'; // M tạo file css này để làm đẹp nhé
 
-const History = () => {
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function History() {
+    const [orders, setOrders] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchOrders = async () => {
-      const savedUser = JSON.parse(localStorage.getItem('user'));
-      if (!savedUser) {
-        window.location.href = '/login';
-        return;
-      }
+    useEffect(() => {
+        const fetchMyOrders = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                // Gọi API lấy đơn hàng của chính user đang đăng nhập
+                const response = await axios.get('http://localhost/api/orders', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                
+                // Giả sử API trả về mảng đơn hàng
+                setOrders(response.data.data || response.data);
+                setLoading(false);
+            } catch (error) {
+                console.error("Lỗi tải lịch sử:", error);
+                setLoading(false);
+            }
+        };
 
-      try {
-        const response = await fetch(`http://localhost:5000/api/orders/${savedUser.email}`);
-        const data = await response.json();
-        setOrders(data);
-      } catch (error) {
-        console.error("Lỗi kết nối:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+        fetchMyOrders();
+    }, []);
 
-    fetchOrders();
-  }, []);
-
-  if (loading) return <div className="loading">Đang tải lịch sử đơn hàng...</div>;
-
-  return (
-    <div className="history-container">
-      <h1 className="history-title">ĐƠN HÀNG CỦA TÔI</h1>
-      
-      {orders.length === 0 ? (
-        <div className="no-orders">Thịnh chưa có đơn hàng nào. Hãy đi trải nghiệm SeaBreeze nhé!</div>
-      ) : (
-        <div className="order-list">
-          {orders.map((order) => (
-            <div key={order.MADONHANG} className="order-card">
-              <div className="order-header">
-                <span className="order-id">Mã đơn: #ORD{order.MADONHANG}</span>
-                <span className="order-date">Ngày đặt: {new Date(order.NGAYDAT).toLocaleDateString('vi-VN')}</span>
-              </div>
-              
-              <div className="order-body">
-                {order.CT_DONHANG.map((item, index) => (
-                  <div key={index} className="order-item">
-                    <span className="item-type">[{item.LOAIDICHVU}]</span>
-                    <span className="item-name">Dịch vụ: {item.MADICHVU}</span>
-                    <span className="item-qty">x{item.SOLUONG}</span>
-                    <span className="item-price">{item.GIABAN.toLocaleString()}đ</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="order-footer">
-                <span className="order-status">Trạng thái: <b className="status-badge">{order.TRANGTHAI}</b></span>
-                <span className="order-total">Tổng tiền: <b>{order.TONGTIEN.toLocaleString()}đ</b></span>
-              </div>
-            </div>
-          ))}
+    return (
+        <div className="history-container" style={{ padding: '40px', maxWidth: '800px', margin: '0 auto' }}>
+            <h2 style={{ marginBottom: '20px' }}>Đơn hàng của tôi</h2>
+            
+            {loading ? (
+                <p>Đang tải lịch sử đặt phòng...</p>
+            ) : orders.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '40px', border: '1px dashed #ccc' }}>
+                    <p>Bạn chưa có đơn hàng nào. Hãy đi trải nghiệm SeaBreeze nhé!</p>
+                </div>
+            ) : (
+                <div className="order-list">
+                    {orders.map(order => (
+                        <div key={order.id} className="order-card" style={{ border: '1px solid #e2e8f0', padding: '20px', borderRadius: '12px', marginBottom: '15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div>
+                                <h4 style={{ margin: '0 0 5px 0' }}>{order.room?.title || 'Phòng đã đặt'}</h4>
+                                <p style={{ margin: '0', color: '#64748b' }}>📅 {order.check_in} đến {order.check_out}</p>
+                            </div>
+                            <div style={{ textAlign: 'right' }}>
+                                <p style={{ fontWeight: 'bold', fontSize: '18px', margin: '0' }}>{Number(order.total_price).toLocaleString()} ₫</p>
+                                <span className={`status-badge ${order.status}`}>
+                                    {order.status === 'confirmed' ? '✅ Đã xác nhận' : '⏳ Chờ xác nhận'}
+                                </span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
-      )}
-    </div>
-  );
-};
-
-export default History;
+    );
+}

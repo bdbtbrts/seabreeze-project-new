@@ -78,4 +78,37 @@ nav a {
   border-radius: 4px;
   cursor: pointer;
 }
+/* Style chung cho tất cả nút trong header */
+.header-action-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+    margin-left: 10px;
+    font-size: 14px;
+}
 
+.header-action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Nút Kênh Chủ Nhà (Xanh lá - cảm giác chuyên nghiệp) */
+.btn-host {
+    background-color: #059669; 
+    color: white;
+}
+
+/* Nút Trở thành chủ nhà (Cam - bắt mắt, kêu gọi hành động) */
+.btn-become-host {
+    background-color: #f59e0b;
+    color: white;
+}
+
+/* Nút Cổng Admin (Tím - màu của sự đặc quyền) */
+.btn-admin {
+    background-color: #7c3aed;
+    color: white;
+}

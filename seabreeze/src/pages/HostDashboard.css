@@ -1,0 +1,120 @@
+/* BỐ CỤC CHÍNH */
+.host-dashboard-container { display: flex; min-height: 100vh; background-color: #f7f7f7; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+/* SIDEBAR (MENU TRÁI) */
+.host-sidebar { width: 250px; background-color: #ffffff; border-right: 1px solid #e0e0e0; display: flex; flex-direction: column; padding-top: 20px; }
+.host-sidebar-logo { font-size: 20px; font-weight: bold; color: #ff385c; padding: 0 24px 24px 24px; border-bottom: 1px solid #f0f0f0; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.host-menu { list-style: none; padding: 0; margin: 0; }
+.host-menu li { padding: 16px 24px; font-size: 16px; color: #484848; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.2s; }
+.host-menu li:hover { background-color: #f8f9fa; color: #222; }
+.host-menu li.active { background-color: #f0f4f8; color: #ff385c; border-right: 4px solid #ff385c; font-weight: 600; }
+.host-menu li i { width: 20px; text-align: center; }
+
+/* NỘI DUNG CHÍNH (BÊN PHẢI) */
+.host-main-content { flex: 1; padding: 40px; overflow-y: auto; }
+.host-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+.host-header h1 { margin: 0; font-size: 28px; color: #222; }
+.host-header-actions { display: flex; align-items: center; gap: 16px; }
+.host-user-profile { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+.host-user-profile img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+
+/* CÁC THẺ THỐNG KÊ (DASHBOARD) */
+.stat-cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 40px; }
+.stat-card { background: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #eee; }
+.stat-card h3 { margin: 0 0 10px 0; color: #717171; font-size: 16px; font-weight: 500; }
+.stat-card .stat-value { margin: 0; font-size: 32px; font-weight: bold; color: #222; }
+.stat-card .stat-trend { font-size: 14px; color: #008a05; margin-top: 8px; font-weight: 600; }
+
+/* BẢNG QUẢN LÝ (TABLES) */
+.host-section-panel { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #eee; }
+.panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.panel-header h2 { margin: 0; font-size: 20px; }
+.btn-primary { background: #ff385c; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+.btn-primary:hover { background: #e51d54; }
+
+.host-table { width: 100%; border-collapse: collapse; }
+.host-table th, .host-table td { padding: 16px; text-align: left; border-bottom: 1px solid #eee; }
+.host-table th { color: #717171; font-weight: 600; font-size: 14px; text-transform: uppercase; }
+.host-table td { color: #222; vertical-align: middle; }
+
+/* CHI TIẾT TRONG BẢNG */
+.room-cell { display: flex; align-items: center; gap: 12px; }
+.room-cell img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; }
+.room-cell-info h4 { margin: 0 0 4px 0; font-size: 16px; }
+.room-cell-info p { margin: 0; font-size: 13px; color: #717171; }
+
+.status-badge { padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+.status-active { background: #e3fcef; color: #008a05; }
+.status-pending { background: #fef5e5; color: #b25c00; }
+.status-inactive { background: #f2f2f2; color: #717171; }
+
+/* --- SỬA CSS CŨ --- */
+
+/* Sửa lại class của nút 'Xem tất cả' cũ (T xóa class .btn-icon bên tab này đi) */
+.btn-see-all {
+    background: transparent;
+    border: 1px solid #222;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #222;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.btn-see-all:hover { background: #f7f7f7; border-color: #000; }
+
+/* 2 nút Hành động mới trong Tab Orders */
+.btn-order-confirm {
+    background-color: transparent;
+    color: #008a05; /* Màu xanh lá (Xác nhận) */
+    border: 1px solid #008a05;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s;
+    margin-right: 8px;
+}
+.btn-order-confirm:hover { background-color: #008a05; color: white; }
+
+.btn-order-cancel {
+    background-color: transparent;
+    color: #ff385c; /* Màu hồng hồng (Hủy) */
+    border: 1px solid #ff385c;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s;
+}
+.btn-order-cancel:hover { background-color: #ff385c; color: white; }
+
+/* --- CSS CHO MODAL FORM THÊM PHÒNG MỚI (Airbnb Style) --- */
+.hd-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: flex; justify-content: center; align-items: center; }
+.hd-modal-content { background: white; width: 100%; max-width: 650px; max-height: 90vh; border-radius: 12px; position: relative; overflow-y: auto; box-shadow: 0 8px 28px rgba(0,0,0,0.28); animation: slideUp 0.3s ease; }
+@keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.hd-modal-header { display: flex; justify-content: center; align-items: center; padding: 16px 24px; border-bottom: 1px solid #ddd; position: sticky; top: 0; background: white; z-index: 10; }
+.hd-modal-header h3 { margin: 0; font-size: 18px; font-weight: bold; }
+.hd-modal-close { position: absolute; left: 16px; background: transparent; border: none; font-size: 20px; cursor: pointer; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.hd-modal-close:hover { background: #f7f7f7; }
+
+.hd-modal-body { padding: 24px; }
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: 14px; font-weight: 600; color: #222; margin-bottom: 6px; }
+.form-input { width: 100%; padding: 12px; border: 1px solid #b0b0b0; border-radius: 8px; font-family: inherit; font-size: 15px; outline: none; }
+.form-input:focus { border-color: #222; border-width: 2px; padding: 11px; }
+
+.image-preview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; border-radius: 8px; overflow: hidden; }
+.image-preview-item { height: 100px; border: 1px solid #eee; border-radius: 8px; object-fit: cover; }
+
+.hd-modal-footer { display: flex; justify-content: flex-end; align-items: center; padding: 16px 24px; border-top: 1px solid #ddd; position: sticky; bottom: 0; background: white; z-index: 10; }
+.btn-create-room { background: linear-gradient(to right, #E61E4D 0%, #E31C5F 50%, #D70466 100%); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; }
+.btn-create-room:hover { opacity: 0.9; }
+.btn-cancel-room { background: transparent; border: none; text-decoration: underline; font-weight: bold; cursor: pointer; color: #222; margin-right: 15px;}
+/* Bổ sung class bị thiếu cho nút Sửa/Xóa */
+.action-btns { display: flex; gap: 8px; }
+.btn-icon { background: #f7f7f7; border: 1px solid #ddd; width: 32px; height: 32px; border-radius: 6px; cursor: pointer; color: #484848; display: flex; justify-content: center; align-items: center; transition: 0.2s;}
+.btn-icon:hover { background: #fff; border-color: #222; color: #222; }
+.btn-icon.delete:hover { background: #ffebe9; border-color: #ff385c; color: #ff385c; }
