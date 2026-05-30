@@ -34,10 +34,4 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
-    'google' => [
-        'client_id' => env('GOOGLE_CLIENT_ID'),
-        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
-        // Dùng env() để linh hoạt đổi link, mặc định là localhost cho máy Thịnh
-        'redirect' => env('GOOGLE_REDIRECT_URI', 'http://localhost/auth/google/callback'),
-    ],
 ];

@@ -71,28 +71,4 @@ class AuthController extends Controller
         ]);
     }
 
-    public function redirectToGoogle() {
-        return Socialite::driver('google')
-            ->with(['prompt' => 'select_account']) 
-            ->redirect();
-    }
-
-    // 2. Nhận kết quả từ Google
-    public function handleGoogleCallback() {
-        $googleUser = Socialite::driver('google')->stateless()->user();
-
-        $user = User::updateOrCreate([
-            'email' => $googleUser->email,
-        ], [
-            'name' => $googleUser->name,
-            'password' => bcrypt('password123'), 
-        ]);
-
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        // DÙNG HÀM env() ĐỂ LẤY LINK TỪ CẤU HÌNH, NẾU KHÔNG CÓ THÌ MẶC ĐỊNH LÀ LOCALHOST
-        $frontendUrl = env('FRONTEND_URL', 'http://localhost:5174');
-
-        return redirect($frontendUrl . "/login?token={$token}&name=" . urlencode($user->name));
-    }
 }

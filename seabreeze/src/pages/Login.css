@@ -58,24 +58,7 @@
   text-align: center;
 }
 
-/* Tùy chỉnh riêng cho từng nút giống ảnh */
-.btn-google {
-  background-color: #2764e6;
-  color: white;
-  border: none;
-}
 
-.btn-google .icon-wrapper {
-  background: white;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  left: 15px;
-}
 
 .btn-facebook {
   background-color: white;

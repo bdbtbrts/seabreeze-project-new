@@ -1,48 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
-import { FcGoogle } from 'react-icons/fc';
-import api from '../api'; // Lôi "bộ não" vào đây
+import api from '../api';
 
 function Login() {
+  // Biến chuyển đổi giữa form Đăng nhập và Đăng ký
+  const [isLogin, setIsLogin] = useState(true);
+
   const [formData, setFormData] = useState({
     email: '',
-    password: ''
+    password: '',
+    confirmPassword: '' // Thêm trường xác nhận mật khẩu
   });
 
   const [errorMsg, setErrorMsg] = useState('');
   const navigate = useNavigate();
-  // Biến dùng để theo dõi xem có đang mở mắt hay nhắm mắt
+  
+  // Trạng thái bật/tắt con mắt cho 2 ô mật khẩu
   const [showPassword, setShowPassword] = useState(false);
-
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
-
-    if (token) {
-      localStorage.setItem('token', token);
-
-      // GỌI API LẤY INFO USER BẰNG axios api
-      api.get('/api/user', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
-        .then(res => {
-          // LƯU CẢ CỤC USER VÀO LOCALSTORAGE
-          localStorage.setItem('user', JSON.stringify(res.data));
-          alert("Đăng nhập thành công!");
-          window.location.href = '/';
-        })
-        .catch(err => console.error("Lỗi lấy user:", err));
-    }
-  }, []);
-
-  // 2. Hàm xử lý nhấn nút Google
-  const handleGoogleLogin = () => {
-    // Đã thay localhost thành link server Render chuẩn chỉnh
-    window.location.href = 'https://seabreeze-backend-wkqw.onrender.com/api/auth/google/redirect';
-  };
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -52,73 +28,79 @@ function Login() {
     e.preventDefault();
     setErrorMsg('');
 
+    // Rào trước vụ mật khẩu không khớp khi Đăng ký
+    if (!isLogin && formData.password !== formData.confirmPassword) {
+      return setErrorMsg('❌ Mật khẩu nhập lại không khớp!');
+    }
+
     try {
-      // Đổi fetch thành api.post, tự động ăn link Render
-      const response = await api.post('/api/login', formData);
+      // Dùng chung form: Nếu là isLogin thì gọi '/api/login', ngược lại gọi '/api/register'
+      const endpoint = isLogin ? '/api/login' : '/api/register';
+      
+      const response = await api.post(endpoint, {
+        email: formData.email,
+        password: formData.password
+        // Backend Laravel thường bắt password_confirmation, nếu m cần thì sửa tên biến ở đây nhé
+      });
+      
       const data = response.data;
 
-      alert("Đăng nhập thành công! Chào " + data.user.name);
-      localStorage.setItem('user', JSON.stringify(data.user));
+      alert("🎉 Thành công! Chào " + (data.user?.name || data.user?.hoTen || formData.email));
+      
+      if (data.user) localStorage.setItem('user', JSON.stringify(data.user));
+      
       const token = data.token || data.access_token;
       if (token) {
         localStorage.setItem('token', token);
       }
+      
       window.location.href = '/';
       
     } catch (error) {
-      // Xử lý báo lỗi nếu sai pass hoặc email
-      const errorMessage = error.response?.data?.message || "Email hoặc mật khẩu không đúng.";
-      setErrorMsg(errorMessage);
+      const errorMessage = error.response?.data?.message || "Thông tin không chính xác hoặc email đã tồn tại.";
+      setErrorMsg("❌ " + errorMessage);
     }
   };
 
   return (
     <div className="login-page">
       <div className="login-card">
-        <h2>Đăng nhập hoặc đăng kí</h2>
+        <h2>{isLogin ? 'Đăng Nhập' : 'Tạo Tài Khoản Mới'}</h2>
         <p className="login-subtitle">
-          Đăng ký miễn phí hoặc đăng nhập để nhận được các ưu đãi và quyền lợi hấp dẫn!
+          {isLogin 
+            ? 'Chào mừng bạn quay lại với SeaBreeze!' 
+            : 'Đăng ký ngay để nhận được các ưu đãi và quyền lợi hấp dẫn!'}
         </p>
 
-        {errorMsg && <div style={{ color: 'red', marginBottom: '15px', textAlign: 'center', backgroundColor: '#fee2e2', padding: '10px', borderRadius: '5px' }}>{errorMsg}</div>}
-
-        <div className="social-login">
-          <button className="btn-social btn-google" onClick={handleGoogleLogin}>
-            <div className="icon-wrapper"><FcGoogle size={18} /></div>
-            <span>Đăng nhập bằng Google</span>
-          </button>
-        </div>
-
-        <div className="divider-text">
-          <span>hoặc</span>
-        </div>
+        {errorMsg && (
+          <div style={{ color: '#dc2626', marginBottom: '15px', textAlign: 'center', backgroundColor: '#fee2e2', padding: '10px', borderRadius: '8px', fontWeight: '500' }}>
+            {errorMsg}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit}>
+          {/* Ô EMAIL */}
           <div className="input-group">
             <label>Email</label>
-            <input type="email" name="email" placeholder="id@email.com" value={formData.email} onChange={handleChange} required />
+            <input 
+              type="email" 
+              name="email" 
+              placeholder="id@email.com" 
+              value={formData.email} 
+              onChange={handleChange} 
+              required 
+            />
           </div>
           
+          {/* Ô MẬT KHẨU */}
           <div className="input-group">
-            {/* Bọc tất cả vào 1 div relative để dễ canh tọa độ */}
-            <div style={{ position: 'relative', marginTop: '15px', marginBottom: '20px' }}>
-                
-                {/* Nhấc Label lên chèn ngang viền */}
+            <div style={{ position: 'relative', marginTop: '15px', marginBottom: isLogin ? '20px' : '15px' }}>
                 <label style={{
-                    position: 'absolute',
-                    top: '-10px',          // Kéo tuột lên trên 10px để đè lên viền
-                    left: '12px',          // Thụt vào trong 12px cho bằng với ô Email
-                    background: '#fff',    // PHÉP THUẬT NẰM Ở ĐÂY: Nền trắng che mất cái viền bên dưới
-                    padding: '0 5px',
-                    fontSize: '13px',
-                    color: '#666',
-                    fontWeight: 'normal',
-                    zIndex: 10             // Ưu tiên hiển thị lên trên cùng
+                    position: 'absolute', top: '-10px', left: '12px', background: '#fff', 
+                    padding: '0 5px', fontSize: '13px', color: '#666', fontWeight: 'normal', zIndex: 10 
                 }}>
                     Mật khẩu
                 </label>
-                
-                {/* Ô input */}
                 <input 
                     type={showPassword ? "text" : "password"} 
                     name="password" 
@@ -127,38 +109,75 @@ function Login() {
                     onChange={handleChange} 
                     required 
                     style={{ 
-                        width: '100%', 
-                        padding: '14px 40px 14px 15px', // Trái/trên/dưới 15px, bên phải chừa 40px cho con mắt
-                        boxSizing: 'border-box',
-                        borderRadius: '8px',
-                        border: '1px solid #ced4da',    // Màu viền xám nhạt
-                        backgroundColor: '#f3f6fc',     // Màu nền hơi xanh xám giống y hệt ô Email của m
-                        outline: 'none',
-                        fontSize: '15px'
+                        width: '100%', padding: '14px 40px 14px 15px', boxSizing: 'border-box',
+                        borderRadius: '8px', border: '1px solid #ced4da', backgroundColor: '#f3f6fc', 
+                        outline: 'none', fontSize: '15px'
                     }} 
                 />
-
-                {/* Cục Icon con mắt */}
                 <i 
                     className={`fa-solid ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`} 
                     onClick={() => setShowPassword(!showPassword)}
                     style={{
-                        position: 'absolute',
-                        right: '15px',
-                        top: '50%',
-                        transform: 'translateY(-50%)',  // Ép nó nằm chính giữa theo chiều dọc
-                        cursor: 'pointer',
-                        color: '#666',
-                        fontSize: '16px',
-                        zIndex: 10
+                        position: 'absolute', right: '15px', top: '50%', transform: 'translateY(-50%)', 
+                        cursor: 'pointer', color: '#666', fontSize: '16px', zIndex: 10
                     }}
                 ></i>
-
             </div>
           </div>
+
+          {/* Ô NHẬP LẠI MẬT KHẨU (CHỈ HIỆN KHI ĐĂNG KÝ) */}
+          {!isLogin && (
+            <div className="input-group">
+              <div style={{ position: 'relative', marginBottom: '20px' }}>
+                  <label style={{
+                      position: 'absolute', top: '-10px', left: '12px', background: '#fff', 
+                      padding: '0 5px', fontSize: '13px', color: '#666', fontWeight: 'normal', zIndex: 10 
+                  }}>
+                      Xác nhận mật khẩu
+                  </label>
+                  <input 
+                      type={showConfirmPassword ? "text" : "password"} 
+                      name="confirmPassword" 
+                      placeholder="Nhập lại mật khẩu" 
+                      value={formData.confirmPassword} 
+                      onChange={handleChange} 
+                      required={!isLogin} 
+                      style={{ 
+                          width: '100%', padding: '14px 40px 14px 15px', boxSizing: 'border-box',
+                          borderRadius: '8px', border: '1px solid #ced4da', backgroundColor: '#f3f6fc', 
+                          outline: 'none', fontSize: '15px'
+                      }} 
+                  />
+                  <i 
+                      className={`fa-solid ${showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'}`} 
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      style={{
+                          position: 'absolute', right: '15px', top: '50%', transform: 'translateY(-50%)', 
+                          cursor: 'pointer', color: '#666', fontSize: '16px', zIndex: 10
+                      }}
+                  ></i>
+              </div>
+            </div>
+          )}
           
-          <button type="submit" className="btn-continue">Tiếp tục</button>
+          <button type="submit" className="btn-continue">
+            {isLogin ? 'Đăng nhập' : 'Tạo tài khoản'}
+          </button>
         </form>
+
+        {/* NÚT CHUYỂN ĐỔI ĐĂNG NHẬP / ĐĂNG KÝ */}
+        <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '14px', color: '#666' }}>
+          {isLogin ? "Bạn chưa có tài khoản? " : "Bạn đã có tài khoản? "}
+          <span 
+            onClick={() => {
+              setIsLogin(!isLogin);
+              setErrorMsg(''); // Xóa lỗi khi đổi form
+            }}
+            style={{ color: '#007bff', cursor: 'pointer', fontWeight: 'bold' }}
+          >
+            {isLogin ? "Đăng ký ngay" : "Đăng nhập"}
+          </span>
+        </div>
 
       </div>
     </div>

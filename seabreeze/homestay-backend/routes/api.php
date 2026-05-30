@@ -23,9 +23,7 @@ Route::get('/rooms/{id}', [RoomController::class, 'show']);
 Route::get('/rooms/{id}/reviews', [ReviewController::class, 'getRoomReviews']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-// Đăng nhập bằng Google 
-Route::get('/auth/google/redirect', [AuthController::class, 'redirectToGoogle']);
-Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
+
 
 // Danh sách đồ thuê cho trang chủ
 Route::get('/accessories', [AccessoryController::class, 'index']);
