@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class RoomController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         // Bắt đầu bằng việc tạo một query builder
     $query = Room::query();
