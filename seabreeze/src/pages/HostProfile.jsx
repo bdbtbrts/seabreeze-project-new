@@ -107,10 +107,7 @@ export default function HostProfile() {
                             <div style={{ fontSize: '10px', fontWeight: '700', color: '#717171', marginTop: '4px', letterSpacing: '0.5px' }}>XẾP HẠNG</div>
                         </div>
                         <div style={{ width: '1px', backgroundColor: '#ebebeb', margin: '0 10px' }}></div>
-                        <div>
-                            <div style={{ fontSize: '22px', fontWeight: '800', color: '#222' }}>4</div>
-                            <div style={{ fontSize: '10px', fontWeight: '700', color: '#717171', marginTop: '4px', letterSpacing: '0.5px' }}>NĂM KINH NGHIỆM</div>
-                        </div>
+                        
                     </div>
                 </div>
 
