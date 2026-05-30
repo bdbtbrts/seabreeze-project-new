@@ -17,13 +17,12 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-// --- CÁC ROUTE CÔNG KHAI ---//git add homestay-backend/routes/api.php
+// --- CÁC ROUTE CÔNG KHAI ---
 Route::get('/rooms', [RoomController::class, 'index']);
 Route::get('/rooms/{id}', [RoomController::class, 'show']);
 Route::get('/rooms/{id}/reviews', [ReviewController::class, 'getRoomReviews']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-
 
 // Danh sách đồ thuê cho trang chủ
 Route::get('/accessories', [AccessoryController::class, 'index']);
