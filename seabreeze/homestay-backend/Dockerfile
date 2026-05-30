@@ -23,6 +23,9 @@ COPY . .
 RUN composer install --no-dev --optimize-autoloader
  #  mở khóa thư mục ảnh
  RUN php artisan storage:link
+ 
+ RUN php artisan optimize:clear
+ RUN php artisan storage:link
 
 # Cấp quyền cho storage và cache
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
