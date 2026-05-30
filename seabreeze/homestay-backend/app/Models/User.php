@@ -30,7 +30,8 @@ class User extends Authenticatable
         'phone',       
         'avatar',      
         'role',       
-        'status',      
+        'status',
+        'job', 'avatar', 'description'
     ];
     protected function casts(): array
     {
