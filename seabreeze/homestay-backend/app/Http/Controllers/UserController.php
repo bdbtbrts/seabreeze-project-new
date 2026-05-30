@@ -122,6 +122,7 @@ public function updateProfile(Request $request)
 public function show($id)
 {
     $user = User::find($id);
-    return response()->json($user);
+    if (!$user) return response()->json(['message' => 'Not found'], 404);
+    return response()->json($user); 
 }
 }
