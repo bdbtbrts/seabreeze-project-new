@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../api'; // Thêm bộ não api vào đây
@@ -67,6 +68,10 @@ export default function HomestayDetail() {
         api.get(`/api/rooms/${id || 1}`)
             .then(res => {
                 const apiData = res.data.data || res.data;
+                console.log("DỮ LIỆU TỪ SERVER TRẢ VỀ:", apiData);
+                if (!apiData.host) {
+                    console.warn("CẢNH BÁO: Không tìm thấy thông tin 'host' trong dữ liệu trả về!");
+                }
 
                 const defaultImages = [
                     'https://placehold.co/800x600', 'https://placehold.co/400x300',
@@ -249,7 +254,7 @@ export default function HomestayDetail() {
                 content: newReviewText
             }, {
                 headers: {
-                    Authorization: `Bearer ${token}` 
+                    Authorization: `Bearer ${token}`
                 }
             });
 
@@ -296,7 +301,13 @@ export default function HomestayDetail() {
         const itemLoc = item.location.toLowerCase();
         return homeLoc.includes(itemLoc) || itemLoc.includes(homeLoc);
     });
-
+    const getAvatarUrl = (avatar) => {
+        if (!avatar) return "https://placehold.co/50"; // Ảnh mặc định nếu không có
+        // Nếu đã là link http rồi thì lấy luôn
+        if (avatar.startsWith('http')) return avatar;
+        // Nếu chỉ là đường dẫn file thì ghép với link server và folder storage
+        return `https://seabreeze-backend-wkqw.onrender.com/storage/${avatar}`;
+    };
     return (
         <div className="hd-container">
             {showDescModal && (
@@ -346,12 +357,18 @@ export default function HomestayDetail() {
 
                     <hr className="hd-divider" />
 
-                    <div className="hd-host-info" onClick={() => navigate('/host/hao')} style={{ cursor: 'pointer' }}>
+                    <div className="hd-host-info" onClick={() => navigate('/host/${homestay.host_id}')} style={{ cursor: 'pointer' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '20px' }}>
                             <img
-                                src={homestay?.host?.avatar || "https://placehold.co/50"}
+                                src={getAvatarUrl(homestay?.host?.avatar)}
                                 alt="Host Avatar"
-                                style={{ width: '50px', height: '50px', borderRadius: '50%', objectFit: 'cover' }}
+                                style={{
+                                    width: '50px',
+                                    height: '50px',
+                                    borderRadius: '50%',
+                                    objectFit: 'cover'
+                                }}
+                                onError={(e) => { e.target.src = "https://placehold.co/50"; }} 
                             />
                             <div>
                                 <h3 style={{ margin: 0, fontSize: '16px' }}>
