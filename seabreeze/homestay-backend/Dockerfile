@@ -21,6 +21,7 @@ COPY . .
 
 # Cài đặt thư viện PHP
 RUN composer install --no-dev --optimize-autoloader
+RUN rm -f bootstrap/cache/*.php
  #  mở khóa thư mục ảnh
  RUN php artisan storage:link
  
