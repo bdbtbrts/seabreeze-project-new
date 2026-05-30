@@ -81,10 +81,7 @@ Route::get('/run-migrations', function () {
     try {
         Artisan::call('route:clear');
         Artisan::call('config:clear');
-        
-        // Chạy lệnh migrate 
         Artisan::call('migrate', ['--force' => true]);
-        
         return response()->json([
             'message' => 'Thông não Route và Migrate thành công rực rỡ!', 
             'output' => Artisan::output()
@@ -94,11 +91,12 @@ Route::get('/run-migrations', function () {
             'error' => 'Lỗi rồi: ' . $e->getMessage()
         ], 500);
     }
-    Route::get('/fix-db', function () {
+});
+
+Route::get('/fix-db', function () {
     \Illuminate\Support\Facades\Schema::dropIfExists('rentals');
     \Illuminate\Support\Facades\DB::table('migrations')->where('migration', 'like', '%create_rentals_table%')->delete();
     \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-    
-    return 'Dọn DB thành công!';
-});
+    return 'Dọn DB thành công.';
+
 });
