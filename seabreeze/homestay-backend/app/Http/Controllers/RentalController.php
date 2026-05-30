@@ -1,3 +1,4 @@
+rental controller:
 <?php
 
 namespace App\Http\Controllers;
@@ -121,7 +122,7 @@ class RentalController extends Controller
         
         return response()->json([
             'success' => true,
-            'message' => 'Đã tiễn đơn thuê lên đường thành công!'
+            'message' => 'Đã xóa đơn thuê!'
         ]);
     }
 }
