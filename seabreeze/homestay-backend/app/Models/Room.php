@@ -20,7 +20,7 @@ class Room extends Model
         'price_per_night',
         'status',
         'host_id',
-        'amenities',
+        'amenities';
     ];
 
     // Ép kiểu mảng images thành JSON khi lưu vào DB
@@ -29,7 +29,7 @@ class Room extends Model
         'amenities' => 'array'
         
     ];
-    // Báo cho Laravel biết: 1 Phòng thuộc về 1 Chủ nhà (User) thông qua cột host_id
+    // 
     public function host()
     {
         return $this->belongsTo(User::class, 'host_id');
