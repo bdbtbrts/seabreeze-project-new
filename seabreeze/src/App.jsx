@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-// Import Context 
+// Import Context
 import { CartProvider } from './context/CartContext'; 
 
 // Import Components & Pages
@@ -41,7 +41,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/homestay/:id" element={<HomestayDetail />} />
-            <Route path="/host/:hostId" element={<HostProfile />} /> 
+            <Route path="/host/:hostId" element={<HostProfile />} />
             <Route path="/register-host" element={<RegisterHost />} />
             <Route path="/login-host" element={<HostLogin />} />
 
