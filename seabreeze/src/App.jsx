@@ -46,6 +46,8 @@ function App() {
             <Route path="/homestay/:id" element={<HomestayDetail />} />
             <Route path="/host/:hostId" element={<HostProfile />} />
             <Route path="/register-host" element={<RegisterHost />} />
+            <Route path="/login-host" element={<HostLogin />} />
+
             {/* =========================================
                 2. CÁC ROUTE CẦN ĐĂNG NHẬP
                 ========================================= */}
@@ -73,7 +75,12 @@ function App() {
               </ProtectedRoute>
             } />
             
-           
+            {/* ĐÃ BẾ VÀO TRONG ROUTES VÀ BẢO MẬT LẠI */}
+            <Route path="/rental-history" element={
+              <ProtectedRoute allowedRoles={memberRoles}>
+                <RentalHistory />
+              </ProtectedRoute>
+            } />
 
             {/* =========================================
                 3. ROUTE QUẢN LÝ CHO CHỦ NHÀ
@@ -83,7 +90,6 @@ function App() {
                 <HostDashboard />
               </ProtectedRoute>
             } />
-            <Route path="/login-host" element={<HostLogin />} />
 
             {/* =========================================
                 4. ROUTE QUẢN TRỊ TỐI CAO CHO ADMIN
@@ -95,12 +101,10 @@ function App() {
             } />
             
           </Routes>
-          <Route path="/rental-history" element={<RentalHistory />} />
         </div>
       </BrowserRouter>
     </CartProvider>
   );
-  
 }
 
 export default App;
