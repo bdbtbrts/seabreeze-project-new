@@ -17,13 +17,12 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-// --- CÁC ROUTE CÔNG KHAI ---//git add homestay-backend/routes/api.php
+// --- CÁC ROUTE CÔNG KHAI ---
 Route::get('/rooms', [RoomController::class, 'index']);
 Route::get('/rooms/{id}', [RoomController::class, 'show']);
 Route::get('/rooms/{id}/reviews', [ReviewController::class, 'getRoomReviews']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-
 
 // Danh sách đồ thuê cho trang chủ
 Route::get('/accessories', [AccessoryController::class, 'index']);
@@ -62,6 +61,7 @@ Route::middleware('auth:sanctum')->group(function () {
 // --- CÁC ROUTE KHÁC & ADMIN ---
 Route::put('/users/{id}/upgrade-host', [UserController::class, 'upgradeToHost']);
 Route::get('/rentals/tracking/{email}', [RentalController::class, 'getByEmail']);
+Route::delete('/admin/rentals/{id}', [RentalController::class, 'destroy']);
 
 Route::put('/admin/rooms/{id}/approve', [RoomController::class, 'approve']);
 Route::get('/admin/rentals', [RentalController::class, 'indexAdmin']);
@@ -98,5 +98,4 @@ Route::get('/fix-db', function () {
     \Illuminate\Support\Facades\DB::table('migrations')->where('migration', 'like', '%create_rentals_table%')->delete();
     \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
     return 'Dọn DB thành công.';
-
 });
