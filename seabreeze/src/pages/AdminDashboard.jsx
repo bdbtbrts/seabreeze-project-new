@@ -73,6 +73,7 @@ export default function AdminDashboard() {
             .then(res => { setAllPromotions(res.data); setLoading(false); })
             .catch(err => { console.error("Lỗi tải khuyến mãi:", err); setLoading(false); });
     };
+
     // --- USEEFFECT: CHẠY HÀM TƯƠNG ỨNG KHI ĐỔI TAB ---
     useEffect(() => {
         if (activeTab === 'rooms') fetchAllRooms();
@@ -140,6 +141,20 @@ export default function AdminDashboard() {
         api.put(`/api/admin/rentals/${id}/status`, { status: newStatus, admin_note: note }, getAuthHeader())
             .then(res => { alert("Đã cập nhật trạng thái đơn thuê thành công!"); fetchAllRentals(); })
             .catch(err => alert("Lỗi khi cập nhật đơn thuê: " + err.message));
+    };
+
+    // 👇 HÀM XÓA ĐƠN THUÊ MỚI THÊM 👇
+    const handleDeleteRental = async (id) => {
+        if (window.confirm("Mày có chắc chắn muốn HỦY/XÓA đơn thuê này khỏi hệ thống không?")) {
+            try {
+                await api.delete(`/api/admin/rentals/${id}`, getAuthHeader());
+                alert("Đã tiễn ẻm lên đường thành công!");
+                fetchAllRentals(); // Reload lại bảng ngay lập tức
+            } catch (error) {
+                console.error("Lỗi khi xóa đơn thuê:", error);
+                alert("Xóa thất bại, check log đi m!");
+            }
+        }
     };
 
     const handleAddPromotion = (e) => {
@@ -358,7 +373,7 @@ export default function AdminDashboard() {
                                     <th>Thời gian (In - Out)</th>
                                     <th>Tổng tiền</th>
                                     <th>Trạng thái</th>
-                                    <th>Thao tác Cứng</th>
+                                    <th>Thao tác </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -410,11 +425,12 @@ export default function AdminDashboard() {
                                     <th>Trạng Thái</th>
                                     <th>Ghi Chú</th>
                                     <th>Thao Tác Admin</th>
+                                    <th>Thao Tác Cứng</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {allRentals.length === 0 ? (
-                                    <tr><td colSpan="8" style={{ textAlign: 'center' }}>Chưa có đơn thuê nào trong hệ thống.</td></tr>
+                                    <tr><td colSpan="9" style={{ textAlign: 'center' }}>Chưa có đơn thuê nào trong hệ thống.</td></tr>
                                 ) : (
                                     allRentals.map(item => (
                                         <tr key={item.id}>
@@ -424,7 +440,7 @@ export default function AdminDashboard() {
                                             <td>{item.quantity}</td>
                                             <td><strong>{Number(item.refund_amount).toLocaleString()} ₫</strong></td>
                                             <td>
-                                                <span className={`badge ${item.status === 'Đã trả' ? 'badge-success' : item.status === 'Hư hỏng' ? 'badge-danger' : 'badge-warning'}`}>
+                                                <span className={`badge ${item.status === 'Đã trả' ? 'badge-success' : item.status === 'Hư hỏng' ? 'badge-danger' : item.status === 'Thành công' ? 'badge-success' : 'badge-warning'}`}>
                                                     {item.status}
                                                 </span>
                                             </td>
@@ -436,6 +452,16 @@ export default function AdminDashboard() {
                                                         <button className="btn-reject" onClick={() => handleUpdateRental(item.id, 'Hư hỏng')}>Báo lỗi</button>
                                                     </div>
                                                 )}
+                                            </td>
+                                            {/* 👇 Gắn cái nút Xóa thần thánh vào đây 👇 */}
+                                            <td>
+                                                <button 
+                                                    className="btn-reject" 
+                                                    style={{ backgroundColor: '#dc2626', color: 'white', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer' }}
+                                                    onClick={() => handleDeleteRental(item.id)}
+                                                >
+                                                    <i className="fa-solid fa-trash"></i> Hủy/Xóa
+                                                </button>
                                             </td>
                                         </tr>
                                     ))

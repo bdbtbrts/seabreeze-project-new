@@ -26,7 +26,8 @@ class RentalController extends Controller
                     'price' => $item['price'],
                     'deposit' => $item['deposit'],
                     'refund_amount' => $item['deposit'] * $item['quantity'], // Tổng cọc của món này
-                    'status' => 'Đang chờ', // Trạng thái mặc định khi vừa đặt
+                    'status' => 'Thành công', 
+                    'admin_note' => $request->admin_note
                 ]);
             }
 
@@ -102,6 +103,25 @@ class RentalController extends Controller
         return response()->json([
             'success' => true,
             'data' => $rentals
+        ]);
+    }
+    // 6. API CHO ADMIN: Xóa/Hủy đơn thuê cứng
+    public function destroy($id)
+    {
+        $rental = Rental::find($id);
+        
+        if (!$rental) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không tìm thấy đơn thuê!'
+            ], 404);
+        }
+
+        $rental->delete();
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Đã tiễn đơn thuê lên đường thành công!'
         ]);
     }
 }
