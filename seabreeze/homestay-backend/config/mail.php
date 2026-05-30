@@ -97,8 +97,7 @@ return [
             'retry_after' => 60,
         ],
         'brevo' => [
-            'transport' => 'symfony',
-            'dsn' => 'brevo+api://' . env('BREVO_API_KEY') . '@default',
+            'transport' => 'brevo',
         ],
 
     ],
