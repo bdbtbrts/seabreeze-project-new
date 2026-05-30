@@ -357,7 +357,7 @@ export default function HomestayDetail() {
 
                     <hr className="hd-divider" />
 
-                    <div className="hd-host-info" onClick={() => navigate('/host/${homestay.host_id}')} style={{ cursor: 'pointer' }}>
+                    <div className="hd-host-info" onClick={() => navigate(`/host/${homestay.host_id}`)} style={{ cursor: 'pointer' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '20px' }}>
                             <img
                                 src={getAvatarUrl(homestay?.host?.avatar)}
