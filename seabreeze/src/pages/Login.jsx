@@ -15,7 +15,6 @@ function Login() {
   // Biến dùng để theo dõi xem có đang mở mắt hay nhắm mắt
   const [showPassword, setShowPassword] = useState(false);
 
-  // 1. useEffect: Hứng token từ URL (được redirect từ Laravel sau khi đăng nhập Google)
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
@@ -42,7 +41,7 @@ function Login() {
   // 2. Hàm xử lý nhấn nút Google
   const handleGoogleLogin = () => {
     // Đã thay localhost thành link server Render chuẩn chỉnh
-    window.location.href = 'https://seabreeze-backend-wkqw.onrender.com/auth/google/redirect';
+    window.location.href = 'https://seabreeze-backend-wkqw.onrender.com/api/auth/google/redirect';
   };
 
   const handleChange = (e) => {
