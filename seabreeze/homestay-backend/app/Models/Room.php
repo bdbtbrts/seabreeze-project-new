@@ -20,7 +20,7 @@ class Room extends Model
         'price_per_night',
         'status',
         'host_id',
-        'amenities';
+        'amenities',
     ];
 
     // Ép kiểu mảng images thành JSON khi lưu vào DB
