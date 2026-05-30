@@ -13,12 +13,16 @@ return new class extends Migration
     {
        Schema::create('rentals', function (Blueprint $table) {
             $table->id();
-            $table->string('customer_email'); // Để biết ai thuê
-            $table->string('product_name'); // Tên món đồ
-            $table->integer('quantity'); // Số lượng
-            $table->decimal('refund_amount', 15, 2); // Tiền cọc hoàn trả
-            $table->string('status')->default('Đang mượn'); // Trạng thái
-            $table->text('admin_note')->nullable(); // Lời nhắn của Admin
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
+            $table->string('customer_email')->nullable();
+            $table->unsignedBigInteger('product_id')->nullable();
+            $table->string('product_name')->nullable();
+            $table->integer('quantity')->default(1);
+            $table->decimal('price', 15, 2)->default(0);
+            $table->decimal('deposit', 15, 2)->default(0);
+            $table->decimal('refund_amount', 15, 2)->default(0);
+            $table->string('status')->default('Đang chờ');
+            $table->text('admin_note')->nullable();
             $table->timestamps();
         });
     }
