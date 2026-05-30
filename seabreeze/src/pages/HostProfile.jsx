@@ -8,13 +8,15 @@ export default function HostProfile() {
     const [host, setHost] = useState(null);
     const [hostListings, setHostListings] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [reviews, setReviews] = useState([]);
 
     const getAvatarUrl = (avatar) => {
         if (!avatar) return "https://placehold.co/200";
         if (avatar.startsWith('http')) return avatar;
         return `https://seabreeze-backend-wkqw.onrender.com/storage/${avatar}`;
     };
-    const [reviews, setReviews] = useState([]);
+    
+    // Tính toán thống kê
     const totalReviews = reviews.length;
     const avgRating = totalReviews > 0
         ? (reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews).toFixed(2)
@@ -22,15 +24,29 @@ export default function HostProfile() {
 
     useEffect(() => {
         setLoading(true);
+        
         // 1. Lấy thông tin Host
         api.get(`/api/users/${hostId}`)
             .then(res => setHost(res.data))
             .catch(err => console.error("Lỗi lấy thông tin host:", err));
 
-        api.get(`/api/hosts/${hostId}/reviews`)
-            .then(res => setReviews(res.data))
+        // 2. Lấy đánh giá của Host
+        api.get(`/api/hosts/${hostId}/reviews`) 
+            .then(res => {
+                const reviewData = Array.isArray(res.data) ? res.data : (res.data.data || []);
+                // Format lại ngày tháng cho đẹp
+                const formattedReviews = reviewData.map(r => {
+                    const d = new Date(r.created_at);
+                    return {
+                        ...r,
+                        date: !isNaN(d) ? `tháng ${d.getMonth() + 1} năm ${d.getFullYear()}` : 'Gần đây'
+                    };
+                });
+                setReviews(formattedReviews);
+            })
             .catch(err => console.error("Lỗi lấy đánh giá host:", err));
-        // 2. Lấy phòng của Host
+
+        // 3. Lấy phòng của Host
         api.get(`/api/rooms?host_id=${hostId}`)
             .then(res => {
                 setHostListings(res.data.data || []);
@@ -46,49 +62,59 @@ export default function HostProfile() {
     if (loading) return <div style={{ textAlign: 'center', marginTop: '100px' }}>Đang tải hồ sơ...</div>;
     if (!host) return <div style={{ textAlign: 'center', marginTop: '100px' }}>Không tìm thấy chủ nhà!</div>;
 
-    // Giả lập đánh giá (vẫn giữ nguyên như yêu cầu của m)
-    const hostReviews = [
-        { id: 1, name: "James", loc: "Edinburgh, Anh", avatar: "https://randomuser.me/api/portraits/men/32.jpg", rating: 5, date: "Hôm nay", text: "The stay was great..." },
-        { id: 2, name: "Satoshi", loc: "Osaka, Nhật", avatar: "https://randomuser.me/api/portraits/men/44.jpg", rating: 5, date: "2 ngày trước", text: "Highly Recommended!..." }
-    ];
-
     return (
         <div className="hp-container">
             {/* HEADER: AVATAR & THÔNG TIN */}
             <div className="hp-header">
-                <div className="hp-left-card">
+                
+                {/* --- CỘT TRÁI: CARD AVATAR --- */}
+                <div className="hp-left-card" style={{ 
+                    backgroundColor: '#fff', 
+                    borderRadius: '20px', 
+                    padding: '30px', 
+                    boxShadow: '0 8px 28px rgba(0,0,0,0.08)', 
+                    textAlign: 'center',
+                    border: '1px solid #ebebeb'
+                }}>
                     <div className="hp-avatar-section">
-                        <img src={getAvatarUrl(host.avatar)} alt={host.name} className="hp-avatar" />
-                        <h2 className="hp-name">{host.name}</h2>
-                        <span className="hp-title-sub"><i className="fa-solid fa-award"></i> Chủ nhà siêu cấp</span>
-                    </div>
-                </div>
-                <hr style={{ margin: '20px 0', border: 'none', borderTop: '1px solid #ddd' }} />
-                <div style={{ display: 'flex', justifyContent: 'space-between', textAlign: 'center' }}>
-                    <div>
-                        <div style={{ fontSize: '20px', fontWeight: 'bold' }}>{totalReviews}</div>
-                        <div style={{ fontSize: '10px', fontWeight: 'bold', color: '#666', marginTop: '4px' }}>ĐÁNH GIÁ</div>
+                        <img 
+                            src={getAvatarUrl(host.avatar)} 
+                            alt={host.name} 
+                            className="hp-avatar" 
+                            style={{ width: '130px', height: '130px', borderRadius: '50%', objectFit: 'cover', margin: '0 auto' }} 
+                        />
+                        <h2 className="hp-name" style={{ marginTop: '16px', fontSize: '28px', fontWeight: '800', color: '#222' }}>
+                            {host.name}
+                        </h2>
+                        <span className="hp-title-sub" style={{ display: 'block', marginBottom: '24px', color: '#717171', fontWeight: '600' }}>
+                            <i className="fa-solid fa-award" style={{ color: '#222' }}></i> Chủ nhà siêu cấp
+                        </span>
                     </div>
 
-                    {/* Đường kẻ dọc phân cách */}
-                    <div style={{ width: '1px', backgroundColor: '#ddd' }}></div>
+                    <hr style={{ margin: '24px 0', border: 'none', borderTop: '1px solid #ebebeb' }} />
 
-                    <div>
-                        <div style={{ fontSize: '20px', fontWeight: 'bold' }}>
-                            {avgRating} <i className="fa-solid fa-star" style={{ fontSize: '14px' }}></i>
+                    {/* THỐNG KÊ GỌN TRONG CARD */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', textAlign: 'left' }}>
+                        <div>
+                            <div style={{ fontSize: '22px', fontWeight: '800', color: '#222' }}>{totalReviews}</div>
+                            <div style={{ fontSize: '10px', fontWeight: '700', color: '#717171', marginTop: '4px', letterSpacing: '0.5px' }}>ĐÁNH GIÁ</div>
                         </div>
-                        <div style={{ fontSize: '10px', fontWeight: 'bold', color: '#666', marginTop: '4px' }}>XẾP HẠNG</div>
-                    </div>
-
-                    {/* Đường kẻ dọc phân cách */}
-                    <div style={{ width: '1px', backgroundColor: '#ddd' }}></div>
-
-                    <div>
-                        <div style={{ fontSize: '20px', fontWeight: 'bold' }}>4</div> {/* M có thể thay số 4 bằng dữ liệu kinh nghiệm từ DB */}
-                        <div style={{ fontSize: '10px', fontWeight: 'bold', color: '#666', marginTop: '4px' }}>NĂM KINH NGHIỆM</div>
+                        <div style={{ width: '1px', backgroundColor: '#ebebeb', margin: '0 10px' }}></div>
+                        <div>
+                            <div style={{ fontSize: '22px', fontWeight: '800', color: '#222' }}>
+                                {avgRating} <i className="fa-solid fa-star" style={{ fontSize: '14px', position: 'relative', top: '-2px' }}></i>
+                            </div>
+                            <div style={{ fontSize: '10px', fontWeight: '700', color: '#717171', marginTop: '4px', letterSpacing: '0.5px' }}>XẾP HẠNG</div>
+                        </div>
+                        <div style={{ width: '1px', backgroundColor: '#ebebeb', margin: '0 10px' }}></div>
+                        <div>
+                            <div style={{ fontSize: '22px', fontWeight: '800', color: '#222' }}>4</div>
+                            <div style={{ fontSize: '10px', fontWeight: '700', color: '#717171', marginTop: '4px', letterSpacing: '0.5px' }}>NĂM KINH NGHIỆM</div>
+                        </div>
                     </div>
                 </div>
 
+                {/* --- CỘT PHẢI: THÔNG TIN CÁ NHÂN --- */}
                 <div className="hp-right-info">
                     <h1>Thông tin về {host.name}</h1>
                     <div className="hp-info-list">
@@ -107,9 +133,10 @@ export default function HostProfile() {
                     </div>
                 </div>
             </div>
+
+            {/* --- SECTION: ĐÁNH GIÁ CỦA KHÁCH --- */}
             <div className="hp-reviews-section" style={{ marginTop: '40px' }}>
                 <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '20px' }}>Đánh giá của {host?.name}</h2>
-
                 {reviews.length > 0 ? (
                     <div style={{
                         display: 'grid',
@@ -130,7 +157,7 @@ export default function HostProfile() {
                                     </div>
                                 </div>
                                 <div style={{ fontSize: '12px', marginBottom: '10px' }}>
-                                    <span style={{ color: '#222' }}>{"★".repeat(review.rating)}</span>
+                                    <span style={{ color: '#222' }}>{"★".repeat(Math.round(review.rating))}{"☆".repeat(5 - Math.round(review.rating))}</span>
                                     <span style={{ color: '#717171' }}> · {review.date}</span>
                                 </div>
                                 <p style={{ color: '#222', fontSize: '16px', lineHeight: '1.5' }}>
@@ -143,7 +170,8 @@ export default function HostProfile() {
                     <p>Chủ nhà này chưa có đánh giá nào.</p>
                 )}
             </div>
-            {/* BÀI ĐĂNG CỦA HOST */}
+
+            {/* --- SECTION: BÀI ĐĂNG CỦA HOST --- */}
             <div className="hp-section">
                 <h2 className="hp-section-title">Bài đăng của {host.name}</h2>
                 <div className="hp-listings-grid">
@@ -151,7 +179,7 @@ export default function HostProfile() {
                         <Link to={`/homestay/${room.id}`} key={room.id} className="hp-listing-card">
                             <img src={room.images?.[0] || 'https://placehold.co/400x300'} alt={room.title} className="hp-listing-img" />
                             <p className="hp-listing-title">{room.title}</p>
-                            <p className="hp-listing-rating"><i className="fa-solid fa-star"></i> 4.8</p>
+                            <p className="hp-listing-rating"><i className="fa-solid fa-star"></i> {room.rating || "4.8"}</p>
                         </Link>
                     )) : <p>Chủ nhà chưa có bài đăng nào.</p>}
                 </div>
