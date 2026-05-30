@@ -14,6 +14,7 @@ $table->foreignId('room_id')->constrained('rooms')->onDelete('cascade');
 $table->string('check_in');
 $table->string('check_out');
 $table->string('total_price');
+$table->string('customer_email')->nullable();
 
 // Trạng thái mặc định khi tạo đơn luôn là 'pending' (Chờ duyệt)
 $table->string('status')->default('pending');

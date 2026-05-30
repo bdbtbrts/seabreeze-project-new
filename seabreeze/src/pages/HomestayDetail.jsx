@@ -224,10 +224,15 @@ export default function HomestayDetail() {
 
     const handleSubmitReview = async () => {
         const storedUser = localStorage.getItem('user');
-        if (!storedUser) {
-            alert("Vui lòng đăng nhập đế viết đánh giá!");
+        const token = localStorage.getItem('token');
+
+        // Kiểm tra xem đã có đủ user và token chưa
+        if (!storedUser || !token) {
+            alert("Vui lòng đăng nhập để viết đánh giá!");
             return;
         }
+
+        // Kiểm tra xem có nhập nội dung chưa
         if (!newReviewText.trim()) {
             alert("Vui lòng nhập nội dung đánh giá!");
             return;
@@ -236,16 +241,21 @@ export default function HomestayDetail() {
         const currentUser = JSON.parse(storedUser);
 
         try {
-            // ĐÃ SỬA THÀNH API
+            // GỌI API VÀ ĐÍNH KÈM TOKEN 
             const res = await api.post('/api/reviews', {
                 user_id: currentUser.id,
                 room_id: id || 1,
                 rating: newReviewRating,
                 content: newReviewText
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}` // Chìa khóa đây nhé!
+                }
             });
 
             alert("🎉 Đã gửi đánh giá thành công! Cảm ơn bạn.");
 
+            // Cập nhật lại giao diện ngay lập tức
             const d = new Date();
             const newReviewUI = {
                 ...res.data.review,
@@ -327,7 +337,7 @@ export default function HomestayDetail() {
             <div className="hd-body">
                 <div className="hd-left-col">
                     <h2 className="hd-subtitle">{displaySubtitle}</h2>
-                    
+
                     <hr className="hd-divider" />
                     <p className="hd-rating-inline">
                         <i className="fa-solid fa-star" style={{ color: '#ffb400' }}></i> {avgRatingReal}
@@ -455,8 +465,8 @@ export default function HomestayDetail() {
 
                                     // Dò tìm hình ảnh và tự ghép URL Laravel
                                     const accImg = item.image || item.img || item.hinh_anh || item.photo || item.thumbnail;
-                                    
-                                    
+
+
                                     const finalImgUrl = accImg
                                         ? (accImg.startsWith('http') ? accImg : `https://seabreeze-backend-wkqw.onrender.com/storage/${accImg}`)
                                         : "https://placehold.co/200";
