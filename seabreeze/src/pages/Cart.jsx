@@ -127,7 +127,8 @@ const Cart = () => {
                                         product_id: item.id,
                                         quantity: item.quantity,
                                         price: item.price,
-                                        deposit: item.deposit
+                                        deposit: item.deposit,
+                                        product_name: item.name,
                                     })),
                                     total_rent: rentTotal,
                                     total_deposit: depositTotal,

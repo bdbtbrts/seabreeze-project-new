@@ -37,8 +37,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/change-password', [UserController::class, 'changePassword']);
     
     // Các thao tác đặt hàng, đánh giá
-    Route::post('/orders', [OrderController::class, 'store']);
+    Route::post('/orders', [OrderController::class, 'store']);    
     Route::post('/reviews', [ReviewController::class, 'store']);
+    Route::post('/rentals', [RentalController::class, 'store']);          
+    Route::get('/user/rentals', [RentalController::class, 'userRentals']);  
     
     // Các thao tác của Chủ nhà (Host)
     Route::post('/rooms', [RoomController::class, 'store']); 

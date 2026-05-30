@@ -92,8 +92,8 @@ function Header() {
               Lịch sử thuê phòng
             </Link>
 
-            <Link to="/rental-history" className="nav-link">
-              <i className="fa-solid fa-camera"></i> Lịch sử thuê đồ
+            <Link to="/rental-history" style={{textDecoration: 'none', color: '#666', fontSize: '14px' }}>
+              Lịch sử thuê đồ
             </Link>
 
             {/* Lấy tên user (dự phòng trường hợp backend trả về name hoặc hoTen) */}
