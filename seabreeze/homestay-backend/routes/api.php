@@ -23,6 +23,7 @@ Route::get('/rooms/{id}', [RoomController::class, 'show']);
 Route::get('/rooms/{id}/reviews', [ReviewController::class, 'getRoomReviews']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/hosts/{id}/reviews', [App\Http\Controllers\UserController::class, 'getHostReviews']);
 
 // Danh sách đồ thuê cho trang chủ
 Route::get('/accessories', [AccessoryController::class, 'index']);

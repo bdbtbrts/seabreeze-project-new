@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Hash;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -124,5 +125,17 @@ public function show($id)
     $user = User::find($id);
     if (!$user) return response()->json(['message' => 'Not found'], 404);
     return response()->json($user); 
+}
+public function getHostReviews($id)
+{
+    $reviews = DB::table('reviews')
+        ->join('rooms', 'reviews.room_id', '=', 'rooms.id')
+        ->join('users', 'reviews.user_id', '=', 'users.id') // Lấy thông tin người viết đánh giá
+        ->where('rooms.host_id', $id)
+        ->select('reviews.*', 'users.name as author', 'users.avatar')
+        ->orderBy('reviews.created_at', 'desc')
+        ->get();
+
+    return response()->json($reviews);
 }
 }
