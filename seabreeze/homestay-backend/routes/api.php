@@ -79,14 +79,14 @@ Route::post('/check-promo', [PromotionController::class, 'checkPromo']);
 
 Route::get('/run-migrations', function () {
     try {
-        // Chạy lệnh clear cache trước cho chắc
+        Artisan::call('route:clear');
         Artisan::call('config:clear');
         
-        // Chạy lệnh migrate
+        // Chạy lệnh migrate 
         Artisan::call('migrate', ['--force' => true]);
         
         return response()->json([
-            'message' => 'Migrate thành công rực rỡ!', 
+            'message' => 'Thông não Route và Migrate thành công rực rỡ!', 
             'output' => Artisan::output()
         ]);
     } catch (\Exception $e) {
