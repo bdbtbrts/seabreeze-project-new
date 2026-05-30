@@ -15,7 +15,7 @@ export default function HostProfile() {
         if (avatar.startsWith('http')) return avatar;
         return `https://seabreeze-backend-wkqw.onrender.com/storage/${avatar}`;
     };
-    
+
     // Tính toán thống kê
     const totalReviews = reviews.length;
     const avgRating = totalReviews > 0
@@ -24,14 +24,14 @@ export default function HostProfile() {
 
     useEffect(() => {
         setLoading(true);
-        
+
         // 1. Lấy thông tin Host
         api.get(`/api/users/${hostId}`)
             .then(res => setHost(res.data))
             .catch(err => console.error("Lỗi lấy thông tin host:", err));
 
         // 2. Lấy đánh giá của Host
-        api.get(`/api/hosts/${hostId}/reviews`) 
+        api.get(`/api/hosts/${hostId}/reviews`)
             .then(res => {
                 const reviewData = Array.isArray(res.data) ? res.data : (res.data.data || []);
                 // Format lại ngày tháng cho đẹp
@@ -66,48 +66,47 @@ export default function HostProfile() {
         <div className="hp-container">
             {/* HEADER: AVATAR & THÔNG TIN */}
             <div className="hp-header">
-                
+
                 {/* --- CỘT TRÁI: CARD AVATAR --- */}
-                <div className="hp-left-card" style={{ 
-                    backgroundColor: '#fff', 
-                    borderRadius: '20px', 
-                    padding: '30px', 
-                    boxShadow: '0 8px 28px rgba(0,0,0,0.08)', 
+                <div className="hp-left-card" style={{
+                    backgroundColor: '#fff',
+                    borderRadius: '20px',
+                    padding: '30px',
+                    boxShadow: '0 8px 28px rgba(0,0,0,0.08)',
                     textAlign: 'center',
                     border: '1px solid #ebebeb'
                 }}>
                     <div className="hp-avatar-section">
-                        <img 
-                            src={getAvatarUrl(host.avatar)} 
-                            alt={host.name} 
-                            className="hp-avatar" 
-                            style={{ width: '130px', height: '130px', borderRadius: '50%', objectFit: 'cover', margin: '0 auto' }} 
+                        <img
+                            src={getAvatarUrl(host.avatar)}
+                            alt={host.name}
+                            className="hp-avatar"
+                            style={{ width: '130px', height: '130px', borderRadius: '50%', objectFit: 'cover', margin: '0 auto' }}
                         />
                         <h2 className="hp-name" style={{ marginTop: '16px', fontSize: '28px', fontWeight: '800', color: '#222' }}>
                             {host.name}
                         </h2>
-                        <span className="hp-title-sub" style={{ display: 'block', marginBottom: '24px', color: '#717171', fontWeight: '600' }}>
+                        <span className="hp-title-sub" style={{ display: 'block', marginBottom: '12px', color: '#717171', fontWeight: '600' }}>
                             <i className="fa-solid fa-award" style={{ color: '#222' }}></i> Chủ nhà siêu cấp
                         </span>
                     </div>
-
-                    <hr style={{ margin: '24px 0', border: 'none', borderTop: '1px solid #ebebeb' }} />
-
-                    {/* THỐNG KÊ GỌN TRONG CARD */}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', textAlign: 'left' }}>
+                    
+                    <hr style={{ margin: '20px 0', border: 'none', borderTop: '1px solid #ebebeb' }} />
+                    
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '40px', textAlign: 'center' }}>
                         <div>
                             <div style={{ fontSize: '22px', fontWeight: '800', color: '#222' }}>{totalReviews}</div>
                             <div style={{ fontSize: '10px', fontWeight: '700', color: '#717171', marginTop: '4px', letterSpacing: '0.5px' }}>ĐÁNH GIÁ</div>
                         </div>
-                        <div style={{ width: '1px', backgroundColor: '#ebebeb', margin: '0 10px' }}></div>
+
+                        <div style={{ width: '1px', height: '35px', backgroundColor: '#ebebeb' }}></div>
+
                         <div>
                             <div style={{ fontSize: '22px', fontWeight: '800', color: '#222' }}>
                                 {avgRating} <i className="fa-solid fa-star" style={{ fontSize: '14px', position: 'relative', top: '-2px' }}></i>
                             </div>
                             <div style={{ fontSize: '10px', fontWeight: '700', color: '#717171', marginTop: '4px', letterSpacing: '0.5px' }}>XẾP HẠNG</div>
                         </div>
-                        <div style={{ width: '1px', backgroundColor: '#ebebeb', margin: '0 10px' }}></div>
-                        
                     </div>
                 </div>
 
