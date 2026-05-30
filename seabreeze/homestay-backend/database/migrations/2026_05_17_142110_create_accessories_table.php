@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('image')->nullable(); // Hình ảnh
             $table->text('description')->nullable(); // Mô tả
             $table->timestamps();
+            $table->string('location')->nullable();
         });
     }
 
