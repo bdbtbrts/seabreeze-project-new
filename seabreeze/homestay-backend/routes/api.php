@@ -94,4 +94,11 @@ Route::get('/run-migrations', function () {
             'error' => 'Lỗi rồi: ' . $e->getMessage()
         ], 500);
     }
+    Route::get('/fix-db', function () {
+    \Illuminate\Support\Facades\Schema::dropIfExists('rentals');
+    \Illuminate\Support\Facades\DB::table('migrations')->where('migration', 'like', '%create_rentals_table%')->delete();
+    \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+    
+    return 'Dọn DB thành công!';
+});
 });
