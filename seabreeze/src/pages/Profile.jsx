@@ -36,19 +36,21 @@ const Profile = () => {
     formData.append('email', user?.email);
 
     try {
-      // Đổi fetch thành api.post
+      // Ép Axios phải nhận diện đây là FormData, không được tự ý đổi sang JSON
       const response = await api.post('/api/upload-avatar', formData, {
         headers: {
+          'Content-Type': 'multipart/form-data', // BẮT BUỘC PHẢI CÓ DÒNG NÀY!
           'Authorization': `Bearer ${token}` 
         }
       });
 
-      const data = response.data; // Axios tự động parse JSON
+      const data = response.data; 
       setAvatar(data.avatarUrl);
       const updatedUser = { ...user, AVATAR: data.avatarUrl }; 
       localStorage.setItem('user', JSON.stringify(updatedUser));
       setUser(updatedUser);
       alert("🎉 Cập nhật ảnh đại diện thành công!");
+
 
     } catch (error) {
       const errorMessage = error.response?.data?.error || error.response?.data?.message || "Không thể upload";
