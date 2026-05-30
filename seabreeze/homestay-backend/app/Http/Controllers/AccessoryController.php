@@ -8,8 +8,21 @@ use Illuminate\Http\Request;
 class AccessoryController extends Controller
 {
     // Lấy danh sách đồ
-    public function index() {
-        return response()->json(['data' => Accessory::orderBy('id', 'desc')->get()]);
+    public function index(Request $request)
+    {
+    $query = \App\Models\Accessory::query();
+
+    // Nếu React có gửi tham số location lên (Lúc vào trang thanh toán)
+    if ($request->has('location')) {
+        $location = $request->input('location');
+        // Dùng LIKE để tìm kiếm chứa từ khóa (Ví dụ trong chuỗi có chữ "Vũng Tàu" là lụm)
+        $query->where('location', 'LIKE', '%' . $location . '%');
+    }
+
+    // Lấy danh sách trả về
+    $accessories = $query->get();
+    
+    return response()->json($accessories);
     }
 
     // HÀM LƯU ĐỒ THUÊ MỚI

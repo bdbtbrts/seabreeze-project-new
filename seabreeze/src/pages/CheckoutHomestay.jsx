@@ -37,45 +37,42 @@ const CheckoutHomestay = () => {
   const vietQrUrl = `https://img.vietqr.io/image/${BANK_ID}-${ACCOUNT_NO}-compact2.png?amount=${amountToPay}&addInfo=${encodeURIComponent(DESCRIPTION)}&accountName=${encodeURIComponent(ACCOUNT_NAME)}`;
 
   // MÓC DỮ LIỆU PHỤ KIỆN THẬT TỪ DATABASE
+  
   useEffect(() => {
-    if (!homestay) return; // Bảo vệ an toàn
+    if (!homestay || !homestay.location) return; // Bảo vệ an toàn
 
     setLoadingAccessories(true);
 
-      api.get('/api/rooms')
-      .then(res => {
-        const rawData = res.data.data || res.data || [];
+    // 1. Tách chuỗi địa chỉ lấy tên thành phố cuối cùng (VD: Vũng Tàu)
+    const parts = homestay.location.split(',');
+    const city = parts[parts.length - 1].trim(); 
 
-        // 1. Map dữ liệu
-        const allAcc = rawData.map(item => ({
-          id: item.id,
-          name: item.name,
-          price: Number(item.price_per_day || item.price || 0),
-          deposit: Number(item.deposit_amount || item.deposit || 0),
-          img: item.image || item.img,
-          stock: item.stock_quantity || item.stock,
-          location: item.location || 'Đà Lạt'
+    // 2. Gọi API lấy phụ kiện, gửi kèm chữ "Vũng Tàu" xuống Backend
+    api.get(`/api/accessories?location=${city}`)
+      .then(res => {
+        // Lấy đúng mảng dữ liệu trả về
+        const rawData = res.data.data || res.data || [];
+        
+        // 🛠️ BƯỚC PHIÊN DỊCH: Đổi tên biến của Backend cho khớp với cái React đang cần
+        const formattedData = rawData.map(item => ({
+            ...item,
+            price: item.price_per_day,    // Gán price_per_day thành biến price
+            deposit: item.deposit_amount, // Gán deposit_amount thành biến deposit
+            img: item.image               // Ép luôn biến ảnh cho chắc cú
         }));
 
-        // 2. Lọc dữ liệu
-        const filtered = allAcc.filter(acc => {
-          if (acc.location && homestay.location) {
-            return homestay.location.toLowerCase().includes(acc.location.toLowerCase());
-          }
-          return false;
-        });
-
-        // 3. CẬP NHẬT STATE (QUAN TRỌNG)
-        setSuggestedAccessories(filtered);
-        setLoadingAccessories(false);
+        // Nạp data đã được phiên dịch vào State
+        setSuggestedAccessories(formattedData);
       })
       .catch(err => {
         console.error("Lỗi lấy danh sách phụ kiện:", err);
-        setLoadingAccessories(false); // Đừng quên tắt loading khi lỗi
+      })
+      .finally(() => {
+        setLoadingAccessories(false); 
       });
 
-  }, [homestay?.location]); // Dùng homestay?.location để tránh lỗi undefined
-  // Nếu không có dữ liệu phòng (do khách bấm F5 hoặc truy cập lụi), điều hướng về trang chủ
+  }, [homestay?.location]);
+
   if (!homestay) {
     return (
       <div style={{ textAlign: 'center', padding: '100px' }}>
