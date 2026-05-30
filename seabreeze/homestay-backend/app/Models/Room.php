@@ -29,10 +29,10 @@ class Room extends Model
         'amenities' => 'array'
         
     ];
-    // 
+    // Báo cho Laravel biết: 1 Phòng thuộc về 1 Chủ nhà (User) thông qua cột host_id
     public function host()
     {
-        return $this->belongsTo(User::class, 'host_id');
+        return $this->belongsTo(\App\Models\User::class, 'host_id');
     }
     
    
