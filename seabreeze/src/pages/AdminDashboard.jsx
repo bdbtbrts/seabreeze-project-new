@@ -422,7 +422,7 @@ export default function AdminDashboard() {
                                     <th>Sản Phẩm</th>
                                     <th>SL</th>
                                     <th>Tiền Cọc</th>
-                                    <th>Trạng Thái</th>
+                                    {/* Đã xóa <th>Trạng Thái</th> ở đây */}
                                     <th>Ghi Chú</th>
                                     <th>Thao Tác Admin</th>
                                     <th>Thao Tác Cứng</th>
@@ -430,7 +430,7 @@ export default function AdminDashboard() {
                             </thead>
                             <tbody>
                                 {allRentals.length === 0 ? (
-                                    <tr><td colSpan="9" style={{ textAlign: 'center' }}>Chưa có đơn thuê nào trong hệ thống.</td></tr>
+                                    <tr><td colSpan="8" style={{ textAlign: 'center' }}>Chưa có đơn thuê nào trong hệ thống.</td></tr>
                                 ) : (
                                     allRentals.map(item => (
                                         <tr key={item.id}>
@@ -439,21 +439,17 @@ export default function AdminDashboard() {
                                             <td>{item.product_name}</td>
                                             <td>{item.quantity}</td>
                                             <td><strong>{Number(item.refund_amount).toLocaleString()} ₫</strong></td>
-                                            <td>
-                                                <span className={`badge ${item.status === 'Đã trả' ? 'badge-success' : item.status === 'Hư hỏng' ? 'badge-danger' : item.status === 'Thành công' ? 'badge-success' : 'badge-warning'}`}>
-                                                    {item.status}
-                                                </span>
-                                            </td>
+                                            {/* Đã xóa thẻ <td> chứa badge Trạng thái ở đây */}
                                             <td><small>{item.admin_note || '-'}</small></td>
                                             <td>
-                                                {item.status === 'Đang mượn' && (
+                                                {/* Đổi điều kiện hiển thị nút từ 'Đang mượn' sang 'Đang chờ' hoặc các trạng thái khác tùy logic hệ thống của m */}
+                                                {item.status !== 'Đã trả' && item.status !== 'Hư hỏng' && (
                                                     <div style={{ display: 'flex', gap: '5px' }}>
                                                         <button className="btn-approve" onClick={() => handleUpdateRental(item.id, 'Đã trả')}>Nhận lại</button>
                                                         <button className="btn-reject" onClick={() => handleUpdateRental(item.id, 'Hư hỏng')}>Báo lỗi</button>
                                                     </div>
                                                 )}
                                             </td>
-                                            {/* 👇 Gắn cái nút Xóa thần thánh vào đây 👇 */}
                                             <td>
                                                 <button 
                                                     className="btn-reject" 
