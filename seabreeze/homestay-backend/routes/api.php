@@ -27,7 +27,6 @@ Route::post('/login', [AuthController::class, 'login']);
 // Danh sách đồ thuê cho trang chủ
 Route::get('/accessories', [AccessoryController::class, 'index']);
 
-// 🚨 --- NHÓM CÁC ROUTE BẮT BUỘC PHẢI ĐĂNG NHẬP --- 🚨
 Route::middleware('auth:sanctum')->group(function () {
     
     // --- CHỨC NĂNG HỒ SƠ CÁ NHÂN (PROFILE) ---
@@ -62,7 +61,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::put('/users/{id}/upgrade-host', [UserController::class, 'upgradeToHost']);
 Route::get('/rentals/tracking/{email}', [RentalController::class, 'getByEmail']);
 Route::delete('/admin/rentals/{id}', [RentalController::class, 'destroy']);
-
+Route::get('/users/{id}', [UserController::class, 'show']);
 Route::put('/admin/rooms/{id}/approve', [RoomController::class, 'approve']);
 Route::get('/admin/rentals', [RentalController::class, 'indexAdmin']);
 Route::put('/admin/rentals/{id}/status', [RentalController::class, 'updateStatus']);
