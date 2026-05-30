@@ -2,10 +2,13 @@
 import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import './Cart.css';
+import api from '../api';
+import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
   const { cartItems, updateQuantity, removeFromCart } = useCart();
-
+  const navigate = useNavigate();
+  
   // 1. STATE BẬT/TẮT MODAL VIETQR
   const [showQR, setShowQR] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -26,6 +29,13 @@ const Cart = () => {
   }, 0);
 
   const finalTotal = rentTotal + depositTotal;
+  
+  const getAuthHeader = () => ({
+    headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'Accept': 'application/json'
+    }
+  });
 
   // 3. CẤU HÌNH THÔNG TIN VIETQR
   const BANK_ID = "MB"; 
@@ -108,19 +118,41 @@ const Cart = () => {
                         Hủy bỏ
                     </button>
                     <button 
-                        onClick={() => {
+                        onClick={async () => {
                             setIsProcessing(true);
-                            setTimeout(() => {
-                                setIsProcessing(false);
+                            try {
+                                // 1. BẮN API LƯU ĐƠN XUỐNG DATABASE
+                                await api.post('/api/rentals', {
+                                    items: cartItems.map(item => ({
+                                        product_id: item.id,
+                                        quantity: item.quantity,
+                                        price: item.price,
+                                        deposit: item.deposit
+                                    })),
+                                    total_rent: rentTotal,
+                                    total_deposit: depositTotal,
+                                    final_total: finalTotal
+                                }, getAuthHeader());
+
+                                // 2. DỌN DẸP GIỎ HÀNG
+                                localStorage.removeItem('cart'); 
+
+                                // 3. ẨN MODAL VÀ CHUYỂN TRANG
                                 setShowQR(false);
-                                alert("🎉 Đã ghi nhận thanh toán! Đơn thuê của bạn đang được xử lý.");
-                                // Ở đây m có thể clear giỏ hàng: clearCart() nếu có viết hàm đó
-                            }, 2000);
+                                navigate('/rental-history'); // Đá qua trang Lịch sử thuê đồ
+                                window.location.reload(); // Ép F5 nhẹ để cập nhật giỏ hàng trên Header về 0
+
+                            } catch (error) {
+                                console.error("Lỗi tạo đơn thuê:", error);
+                                alert("Có lỗi xảy ra khi lưu đơn hàng! Vui lòng thử lại.");
+                            } finally {
+                                setIsProcessing(false);
+                            }
                         }} 
                         disabled={isProcessing}
                         style={{ flex: 1, padding: '12px', border: 'none', background: isProcessing ? '#ccc' : '#007bff', color: '#fff', borderRadius: '8px', cursor: isProcessing ? 'not-allowed' : 'pointer', fontWeight: 'bold' }}
                     >
-                        {isProcessing ? 'Đang kiểm tra...' : 'Tôi đã chuyển khoản'}
+                        {isProcessing ? 'Đang xử lý...' : 'Tôi đã chuyển khoản'}
                     </button>
                 </div>
             </div>

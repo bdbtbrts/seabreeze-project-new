@@ -19,8 +19,7 @@ import HostDashboard from './pages/HostDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import RegisterHost from './pages/RegisterHost';
 import HostLogin from './pages/HostLogin';
-
-// Import ProtectedRoute (Bức tường lửa bảo vệ)
+import RentalHistory from './pages/RentalHistory';
 import ProtectedRoute from './components/ProtectedRoute'; 
 
 // Import CSS
@@ -96,10 +95,12 @@ function App() {
             } />
             
           </Routes>
+          <Route path="/rental-history" element={<RentalHistory />} />
         </div>
       </BrowserRouter>
     </CartProvider>
   );
+  
 }
 
 export default App;

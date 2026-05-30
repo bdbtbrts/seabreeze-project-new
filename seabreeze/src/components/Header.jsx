@@ -89,10 +89,12 @@ function Header() {
           // --- TRẠNG THÁI: ĐÃ ĐĂNG NHẬP ---
           <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
             <Link to="/history" style={{ textDecoration: 'none', color: '#666', fontSize: '14px' }}>
-              Lịch sử
+              Lịch sử thuê phòng
             </Link>
 
-            
+            <Link to="/rental-history" className="nav-link">
+              <i className="fa-solid fa-camera"></i> Lịch sử thuê đồ
+            </Link>
 
             {/* Lấy tên user (dự phòng trường hợp backend trả về name hoặc hoTen) */}
             <Link to="/profile" style={{ textDecoration: 'none', color: '#333', fontWeight: '500' }}>
