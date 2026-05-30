@@ -71,7 +71,7 @@ function Home() {
     const hanoiRooms = allProducts.filter(item => item.type === "Homestay" && item.location.toLowerCase().includes("hà nội"));
     const nhaTrangRooms = allProducts.filter(item => item.type === "Homestay" && item.location.toLowerCase().includes("nha trang"));
     const vungTauRooms = allProducts.filter(item => item.type === "Homestay" && item.location.toLowerCase().includes("vũng tàu"));
-    const seoulRooms = allProducts.filter(item => item.type === "Homestay" && item.location.toLowerCase().includes("seoul"));
+    const hoChiMinhRooms = allProducts.filter(item => item.type === "Homestay" && item.location.toLowerCase().includes("tp. hồ chí minh"));
 
     const handleActionClick = (item) => {
         if (item.type === "Homestay") {
@@ -560,7 +560,7 @@ function Home() {
                         {renderCarouselRow("Nơi lưu trú được ưa chuộng tại Hà Nội", hanoiRooms)}
                         {renderCarouselRow("Điểm đến hấp dẫn tại Nha Trang", nhaTrangRooms)}
                         {renderCarouselRow("Khám phá kỳ nghỉ tại Vũng Tàu", vungTauRooms)}
-                        {renderCarouselRow("Trải nghiệm lưu trú tại TP. Hồ Chí Minh", seoulRooms)}
+                        {renderCarouselRow("Trải nghiệm lưu trú tại TP. Hồ Chí Minh", hoChiMinhRooms)}
                     </section>
 
                     {/* TRẢ LẠI Y NGUYÊN GIAO DIỆN KHÁM PHÁ CỦA M NÈ */}

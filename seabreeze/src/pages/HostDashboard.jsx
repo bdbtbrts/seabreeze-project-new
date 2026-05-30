@@ -4,6 +4,11 @@ import api from '../api'; // Gọi bộ não api vào
 import './HostDashboard.css';
 
 export default function HostDashboard() {
+    const getAvatarUrl = (avatar) => {
+    if (!avatar) return "https://placehold.co/40";
+    if (avatar.startsWith('http')) return avatar;
+    return `https://seabreeze-backend-wkqw.onrender.com/storage/${avatar}`;
+};
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('overview');
 
@@ -713,7 +718,7 @@ export default function HostDashboard() {
                     <div className="host-header-actions">
                         <button className="btn-icon" style={{ border: 'none', background: 'white' }}><i className="fa-regular fa-bell"></i></button>
                         <div className="host-user-profile">
-                            <img src={currentUser?.avatar || "https://placehold.co/40"} alt="Avatar" style={{ borderRadius: '50%', width: '40px', height: '40px' }} />
+                            <img src={getAvatarUrl(currentUser?.avatar)} alt="Avatar" style={{ borderRadius: '50%', width: '40px', height: '40px', objectFit: 'cover' }} />
                             <span>{currentUser?.name || currentUser?.hoTen || 'Chủ nhà'}</span>
                         </div>
                     </div>
