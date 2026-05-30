@@ -1,10 +1,9 @@
-rental controller:
 <?php
 
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Rental; // Nhớ đảm bảo m đã có Model Rental nhé
+use App\Models\Rental; 
 use Illuminate\Support\Facades\Log;
 
 class RentalController extends Controller
