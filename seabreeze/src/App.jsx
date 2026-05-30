@@ -1,3 +1,31 @@
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+// Import Context 
+import { CartProvider } from './context/CartContext'; 
+
+// Import Components & Pages
+import Header from './components/Header';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Cart from './pages/Cart'; 
+import CheckoutHomestay from './pages/CheckoutHomestay.jsx';
+import Register from './pages/Register.jsx';
+import Profile from './pages/Profile.jsx';
+import History from './pages/History.jsx';
+import HomestayDetail from './pages/HomestayDetail'; 
+import HostProfile from './pages/HostProfile'; 
+import HostDashboard from './pages/HostDashboard';
+import AdminDashboard from './pages/AdminDashboard';
+import RegisterHost from './pages/RegisterHost';
+import HostLogin from './pages/HostLogin';
+import RentalHistory from './pages/RentalHistory';
+import ProtectedRoute from './components/ProtectedRoute'; 
+
+// Import CSS
+import './index.css';
+import './App.css';
+
 function App() {
   const memberRoles = ['Khách hàng', 'Chủ nhà', 'Admin'];
 
@@ -13,7 +41,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/homestay/:id" element={<HomestayDetail />} />
-            <Route path="/host/:hostId" element={<HostProfile />} /> {/* Giữ lại cái này */}
+            <Route path="/host/:hostId" element={<HostProfile />} /> 
             <Route path="/register-host" element={<RegisterHost />} />
             <Route path="/login-host" element={<HostLogin />} />
 
