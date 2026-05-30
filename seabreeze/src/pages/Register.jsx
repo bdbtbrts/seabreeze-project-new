@@ -24,26 +24,19 @@ const Register = () => {
     setError(''); 
 
     try {
-      // Đã sửa lại đường dẫn API trỏ về Laravel
-      const response = await api.post('/api/register', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Accept': 'application/json' // <--- Đưa nó vào đây mới đúng nè!
-        },
-        body: JSON.stringify(formData)
-      });
+      const response = await api.post('/api/register', formData);
 
-      const data = await response.json();
-
-      if (response.ok) {
-        alert("🎉 Đăng ký thành công! Chào mừng bạn đến với SeaBreeze.");
-        navigate('/login'); 
-      } else {
-        setError(data.message || "Đăng ký thất bại, vui lòng kiểm tra lại.");
-      }
+      alert("🎉 Đăng ký thành công! Chào mừng bạn đến với SeaBreeze.");
+      navigate('/login'); 
+      
     } catch (error) {
-      setError("⚠️ Lỗi kết nối đến Server Laravel!");
+      
+      if (error.response && error.response.data) {
+        setError(error.response.data.message || "Đăng ký thất bại!");
+      } else {
+        // Lỗi mạng hoặc server sập hẳn
+        setError("Không thể kết nối đến Server!");
+      }
     }
   };
 
