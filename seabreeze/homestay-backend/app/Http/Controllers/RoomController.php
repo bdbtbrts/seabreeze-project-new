@@ -9,9 +9,17 @@ class RoomController extends Controller
 {
     public function index()
     {
-        // Lấy tất cả phòng trong Database, dùng with('host') để lấy luôn thông tin chủ nhà
-        $rooms = \App\Models\Room::with('host')->get(); 
-        return response()->json(['data' => $rooms]);
+        // Bắt đầu bằng việc tạo một query builder
+    $query = Room::query();
+
+    // Nếu request có gửi kèm host_id lên thì mình mới lọc
+    if ($request->has('host_id')) {
+        $query->where('host_id', $request->host_id);
+    }
+
+    // Lấy dữ liệu
+    $rooms = $query->with('host')->get(); 
+    return response()->json(['data' => $rooms]);
     }
 
     public function show($id)
