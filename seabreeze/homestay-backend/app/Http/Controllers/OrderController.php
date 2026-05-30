@@ -59,7 +59,7 @@ class OrderController extends Controller
             \Mail::to($customerEmail)->send(new \App\Mail\OrderConfirmedMail($order));
         } catch (\Exception $e) {
             \Log::error("Lỗi gửi mail xác nhận: " . $e->getMessage());
-            return response()->json(['message' => 'Đã xác nhận đơn nhưng hệ thống gửi mail bị lỗi!'], 500);
+            return response()->json(['message' => 'Đã xác nhận đơn hàng! (Gửi mail thất bại: ' . $e->getMessage() . ')'], 200);
         }
 
         return response()->json(['message' => 'Đã xác nhận đơn hàng và bắn Email thành công!']);
