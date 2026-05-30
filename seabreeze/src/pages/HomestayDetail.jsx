@@ -249,7 +249,7 @@ export default function HomestayDetail() {
                 content: newReviewText
             }, {
                 headers: {
-                    Authorization: `Bearer ${token}` // Chìa khóa đây nhé!
+                    Authorization: `Bearer ${token}` 
                 }
             });
 

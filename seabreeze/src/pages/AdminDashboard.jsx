@@ -33,7 +33,7 @@ export default function AdminDashboard() {
 
     const fetchDashboardStats = () => {
         setLoading(true);
-        api.get('/api/admin/dashboard-stats')
+        api.get('/api/admin/dashboard-stats', getAuthHeader()) 
             .then(res => { setDashboardStats(res.data); setLoading(false); })
             .catch(err => { console.error("Lỗi lấy thống kê:", err); setLoading(false); });
     };
@@ -41,39 +41,38 @@ export default function AdminDashboard() {
     // --- CÁC HÀM FETCH DỮ LIỆU ---
     const fetchAllRooms = () => {
         setLoading(true);
-        api.get('/api/rooms')
+        api.get('/api/rooms', getAuthHeader()) 
             .then(res => { setAllRooms(res.data.data || []); setLoading(false); })
             .catch(err => { console.error("Lỗi lấy dữ liệu phòng:", err); setLoading(false); });
     };
 
     const fetchAllOrders = () => {
         setLoading(true);
-        api.get('/api/orders')
+        api.get('/api/orders', getAuthHeader()) 
             .then(res => { setAllOrders(res.data.data || []); setLoading(false); })
             .catch(err => { console.error("Lỗi lấy dữ liệu đơn hàng:", err); setLoading(false); });
     };
 
     const fetchAllRentals = () => {
         setLoading(true);
-        api.get('/api/admin/rentals')
+        api.get('/api/admin/rentals', getAuthHeader()) 
             .then(res => { setAllRentals(res.data.data || []); setLoading(false); })
             .catch(err => { console.error("Lỗi lấy danh sách đơn thuê:", err); setLoading(false); });
     };
 
     const fetchAllUsers = () => {
         setLoading(true);
-        api.get('/api/admin/users')
+        api.get('/api/admin/users', getAuthHeader()) 
             .then(res => { setAllUsers(res.data); setLoading(false); })
             .catch(err => { console.error("Lỗi lấy user:", err); setLoading(false); });
     };
 
     const fetchAllPromotions = () => {
         setLoading(true);
-        api.get('/api/admin/promotions')
+        api.get('/api/admin/promotions', getAuthHeader()) 
             .then(res => { setAllPromotions(res.data); setLoading(false); })
             .catch(err => { console.error("Lỗi tải khuyến mãi:", err); setLoading(false); });
     };
-
     // --- USEEFFECT: CHẠY HÀM TƯƠNG ỨNG KHI ĐỔI TAB ---
     useEffect(() => {
         if (activeTab === 'rooms') fetchAllRooms();
