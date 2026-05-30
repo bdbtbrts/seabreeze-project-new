@@ -14,7 +14,7 @@ export default function LoginHost() {
 
             if (user.role === 'Chủ nhà' || user.role === 'Admin') {
                 localStorage.setItem('user', JSON.stringify(user));
-                window.location.href = '/host-dashboard'; // Vào thẳng trang Host
+                navigate('/host-dashboard');
             } else {
                 alert("Tài khoản này không phải Chủ nhà!");
             }

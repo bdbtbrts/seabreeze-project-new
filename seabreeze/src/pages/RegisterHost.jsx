@@ -53,8 +53,7 @@ export default function RegisterHost() {
 
             alert("🎉 Đăng ký thành công! Chào mừng bạn đến với Kênh Chủ Nhà.");
 
-            // Ép tải lại trang một lần để Header nhận diện Role mới, sau đó đá vào Host Dashboard
-            window.location.href = '/host-dashboard';
+            navigate('/host-dashboard');
 
         } catch (error) {
             console.error("Lỗi nâng cấp:", error);
