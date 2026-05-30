@@ -86,12 +86,11 @@ export default function HostProfile() {
                         <h2 className="hp-name" style={{ marginTop: '16px', fontSize: '28px', fontWeight: '800', color: '#222' }}>
                             {host.name}
                         </h2>
-                        <span className="hp-title-sub" style={{ display: 'block', marginBottom: '12px', color: '#717171', fontWeight: '600' }}>
-                            <i className="fa-solid fa-award" style={{ color: '#222' }}></i> Chủ nhà siêu cấp
+                        <span className="hp-title-sub" style={{ display: 'block', marginBottom: '6px', color: '#717171', fontWeight: '600' }}>
+                            <i className="fa-solid fa-award" style={{ color: '#222' }}></i> Chủ nhà 
                         </span>
                     </div>
                     
-                    <hr style={{ margin: '20px 0', border: 'none', borderTop: '1px solid #ebebeb' }} />
                     
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '40px', textAlign: 'center' }}>
                         <div>
